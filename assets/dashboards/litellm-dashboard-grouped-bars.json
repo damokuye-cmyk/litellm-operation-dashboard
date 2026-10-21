@@ -1,0 +1,2713 @@
+{
+ "dashboard": {
+  "graphTooltip": 1,
+  "id": 4,
+  "panels": [
+   {
+    "collapsed": false,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 0
+    },
+    "id": 1,
+    "panels": [],
+    "title": "Overview",
+    "type": "row"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "unit": "locale"
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 4,
+     "w": 4,
+     "x": 0,
+     "y": 1
+    },
+    "id": 2,
+    "options": {
+     "colorMode": "value",
+     "graphMode": "area",
+     "reduceOptions": {
+      "calcs": [
+       "lastNotNull"
+      ],
+      "fields": "",
+      "values": false
+     },
+     "textMode": "auto"
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "table",
+      "rawQuery": true,
+      "rawSql": "SELECT COUNT(*) AS requests FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring})",
+      "refId": "A"
+     }
+    ],
+    "title": "Total Requests",
+    "type": "stat"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "description": "success / (total - client param errors). Parameter errors (400/401/403 class: invalid model, unsupported params, key not allowed, etc.) are removed from the denominator, consistent with the Failed Requests card caliber.",
+    "fieldConfig": {
+     "defaults": {
+      "max": 100,
+      "thresholds": {
+       "mode": "absolute",
+       "steps": [
+        {
+         "color": "red",
+         "value": null
+        },
+        {
+         "color": "yellow",
+         "value": 90
+        },
+        {
+         "color": "green",
+         "value": 97
+        }
+       ]
+      },
+      "unit": "percent"
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 4,
+     "w": 4,
+     "x": 4,
+     "y": 1
+    },
+    "id": 3,
+    "options": {
+     "colorMode": "value",
+     "graphMode": "area",
+     "reduceOptions": {
+      "calcs": [
+       "lastNotNull"
+      ],
+      "fields": "",
+      "values": false
+     },
+     "textMode": "auto"
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "table",
+      "rawQuery": true,
+      "rawSql": "SELECT ROUND(100.0 * COUNT(*) FILTER (WHERE status = 'success') / NULLIF(COUNT(*) FILTER (WHERE status = 'success' OR NOT (metadata->'error_information'->>'error_class' IN ('BadRequestError','UnsupportedParamsError','AuthenticationError') OR metadata->'error_information'->>'error_code' IN ('400','401','403') OR metadata->'error_information'->>'error_message' ~* '(invalid model name|key not allowed to access model|does not support parameters|unsupported chat content part|not a multimodal model|unterminated string|cannot be greater than|at most [0-9]+ image|unexpected keyword argument|only support the value)')), 0), 2) AS success_rate FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring})",
+      "refId": "A"
+     }
+    ],
+    "title": "Success Rate (excl. client param errors)",
+    "type": "stat"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "description": "Counts failures EXCLUDING client-caused parameter errors (400/401/403 class: bad request, invalid model, unsupported params, key not allowed). Param errors remain visible in the failed-request list with a 错误类型 label.",
+    "fieldConfig": {
+     "defaults": {
+      "thresholds": {
+       "mode": "absolute",
+       "steps": [
+        {
+         "color": "green",
+         "value": null
+        },
+        {
+         "color": "red",
+         "value": 1
+        }
+       ]
+      },
+      "unit": "locale"
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 4,
+     "w": 4,
+     "x": 8,
+     "y": 1
+    },
+    "id": 4,
+    "options": {
+     "colorMode": "value",
+     "graphMode": "area",
+     "reduceOptions": {
+      "calcs": [
+       "lastNotNull"
+      ],
+      "fields": "",
+      "values": false
+     },
+     "textMode": "auto"
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "table",
+      "rawQuery": true,
+      "rawSql": "SELECT COUNT(*) FILTER (WHERE status = 'failure' AND NOT (metadata->'error_information'->>'error_class' IN ('BadRequestError','UnsupportedParamsError','AuthenticationError') OR metadata->'error_information'->>'error_code' IN ('400','401','403') OR metadata->'error_information'->>'error_message' ~* '(invalid model name|key not allowed to access model|does not support parameters|unsupported chat content part|not a multimodal model|unterminated string|cannot be greater than|at most [0-9]+ image)')) AS failed FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring})",
+      "refId": "A"
+     }
+    ],
+    "title": "Failed Requests (excl. client param errors)",
+    "type": "stat"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "unit": "short"
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 4,
+     "w": 4,
+     "x": 12,
+     "y": 1
+    },
+    "id": 5,
+    "options": {
+     "colorMode": "value",
+     "graphMode": "area",
+     "reduceOptions": {
+      "calcs": [
+       "lastNotNull"
+      ],
+      "fields": "",
+      "values": false
+     },
+     "textMode": "auto"
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "table",
+      "rawQuery": true,
+      "rawSql": "SELECT ROUND(SUM(total_tokens)) AS total_tokens FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring})",
+      "refId": "A"
+     }
+    ],
+    "title": "Total Tokens",
+    "type": "stat"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "description": "Same metric as the E2E chart: request_duration_ms = endTime - startTime (equal within 1ms).",
+    "fieldConfig": {
+     "defaults": {
+      "unit": "ms"
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 4,
+     "w": 4,
+     "x": 16,
+     "y": 1
+    },
+    "id": 6,
+    "options": {
+     "colorMode": "value",
+     "graphMode": "area",
+     "reduceOptions": {
+      "calcs": [
+       "lastNotNull"
+      ],
+      "fields": "",
+      "values": false
+     },
+     "textMode": "auto"
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "table",
+      "rawQuery": true,
+      "rawSql": "SELECT ROUND(AVG(request_duration_ms)::numeric, 0) AS avg_ms FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring})",
+      "refId": "A"
+     }
+    ],
+    "title": "Avg E2E Latency (ms)",
+    "type": "stat"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "description": "Ctrl+click a legend label to remove just that series (click again to restore). Plain click isolates it instead.",
+    "fieldConfig": {
+     "defaults": {
+      "custom": {
+       "barAlignment": 0,
+       "drawStyle": "bars",
+       "fillOpacity": 100,
+       "gradientMode": "none",
+       "lineInterpolation": "linear",
+       "lineWidth": 1,
+       "showPoints": "never",
+       "spanNulls": true,
+       "stacking": {
+        "group": "A",
+        "mode": "normal"
+       }
+      },
+      "unit": "locale"
+     },
+     "overrides": [
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "glm-text"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "green",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "deepseek-v4-flash"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "blue",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "glm53-flash"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "orange",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "Search Agent"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "purple",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "<none>"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "#8e8e8e",
+          "mode": "fixed"
+         }
+        }
+       ]
+      }
+     ]
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 12,
+     "x": 0,
+     "y": 7
+    },
+    "id": 7,
+    "options": {
+     "legend": {
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "tooltip": {
+      "mode": "multi",
+      "sort": "desc"
+     }
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "time_series",
+      "rawQuery": true,
+      "rawSql": "SELECT $__timeGroupAlias(\"startTime\", $bucket), CASE WHEN model_group IN ('glm52', 'glm5.1-w8a8', 'glm53', 'glm5.1') THEN 'glm-text' WHEN model_group IN ('deepseek-v4-flash', 'deepseek-v4-flash0731') THEN 'deepseek-v4-flash' ELSE COALESCE(NULLIF(model_group, ''), '<none>') END AS metric, COUNT(*) AS requests FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring}) GROUP BY 1, 2 ORDER BY 1, 2",
+      "refId": "A"
+     }
+    ],
+    "title": "N1 Requests per $bucket (by model group)",
+    "type": "timeseries"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "description": "Ctrl+click a legend label to remove just that series (click again to restore). Plain click isolates it instead.",
+    "fieldConfig": {
+     "defaults": {
+      "custom": {
+       "barAlignment": 0,
+       "drawStyle": "bars",
+       "fillOpacity": 100,
+       "gradientMode": "none",
+       "lineInterpolation": "linear",
+       "lineWidth": 1,
+       "showPoints": "never",
+       "spanNulls": true,
+       "stacking": {
+        "group": "A",
+        "mode": "normal"
+       }
+      },
+      "unit": "short"
+     },
+     "overrides": [
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "glm-text"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "green",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "deepseek-v4-flash"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "blue",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "glm53-flash"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "orange",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "Search Agent"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "purple",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "<none>"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "#8e8e8e",
+          "mode": "fixed"
+         }
+        }
+       ]
+      }
+     ]
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 12,
+     "x": 12,
+     "y": 7
+    },
+    "id": 8,
+    "options": {
+     "legend": {
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "tooltip": {
+      "mode": "multi",
+      "sort": "desc"
+     }
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "time_series",
+      "rawQuery": true,
+      "rawSql": "SELECT $__timeGroupAlias(\"startTime\", $bucket), CASE WHEN model_group IN ('glm52', 'glm5.1-w8a8', 'glm53', 'glm5.1') THEN 'glm-text' WHEN model_group IN ('deepseek-v4-flash', 'deepseek-v4-flash0731') THEN 'deepseek-v4-flash' ELSE COALESCE(NULLIF(model_group, ''), '<none>') END AS metric, ROUND(SUM(total_tokens)) AS tokens FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring}) GROUP BY 1, 2 ORDER BY 1, 2",
+      "refId": "A"
+     }
+    ],
+    "title": "N2 Tokens per $bucket (by model group)",
+    "type": "timeseries"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "description": "Ctrl+click a legend label to remove just that series (click again to restore). Plain click isolates it instead.",
+    "fieldConfig": {
+     "defaults": {
+      "custom": {
+       "barAlignment": 0,
+       "drawStyle": "bars",
+       "fillOpacity": 100,
+       "gradientMode": "none",
+       "lineInterpolation": "linear",
+       "lineWidth": 1,
+       "showPoints": "never",
+       "spanNulls": true,
+       "stacking": {
+        "group": "A",
+        "mode": "normal"
+       }
+      },
+      "unit": "locale"
+     },
+     "overrides": [
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "glm-text"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "green",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "deepseek-v4-flash"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "blue",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "glm53-flash"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "orange",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "Search Agent"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "purple",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "<none>"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "#8e8e8e",
+          "mode": "fixed"
+         }
+        }
+       ]
+      }
+     ]
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 12,
+     "x": 0,
+     "y": 15
+    },
+    "id": 10,
+    "options": {
+     "legend": {
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "tooltip": {
+      "mode": "multi",
+      "sort": "desc"
+     }
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "time_series",
+      "rawQuery": true,
+      "rawSql": "SELECT $__timeGroupAlias(\"startTime\", $bucket), CASE WHEN model_group IN ('glm52', 'glm5.1-w8a8', 'glm53', 'glm5.1') THEN 'glm-text' WHEN model_group IN ('deepseek-v4-flash', 'deepseek-v4-flash0731') THEN 'deepseek-v4-flash' ELSE COALESCE(NULLIF(model_group, ''), '<none>') END AS metric, COUNT(*) FILTER (WHERE status = 'failure' AND NOT (metadata->'error_information'->>'error_class' IN ('BadRequestError','UnsupportedParamsError','AuthenticationError') OR metadata->'error_information'->>'error_code' IN ('400','401','403') OR metadata->'error_information'->>'error_message' ~* '(invalid model name|key not allowed to access model|does not support parameters|unsupported chat content part|not a multimodal model|unterminated string|cannot be greater than|at most [0-9]+ image)')) AS failed FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring}) GROUP BY 1, 2 ORDER BY 1, 2",
+      "refId": "A"
+     }
+    ],
+    "title": "N5 Failures per $bucket (by model group)",
+    "type": "timeseries"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "description": "Ctrl+click a legend label to remove just that series (click again to restore). Plain click isolates it instead.",
+    "fieldConfig": {
+     "defaults": {
+      "custom": {
+       "barAlignment": 0,
+       "drawStyle": "line",
+       "fillOpacity": 10,
+       "gradientMode": "none",
+       "lineInterpolation": "smooth",
+       "lineWidth": 2,
+       "pointSize": 5,
+       "showPoints": "never",
+       "spanNulls": true,
+       "stacking": {
+        "group": "A",
+        "mode": "none"
+       }
+      },
+      "unit": "ms"
+     },
+     "overrides": [
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "glm-text"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "green",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "deepseek-v4-flash"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "blue",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "glm53-flash"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "orange",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "Search Agent"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "purple",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "<none>"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "#8e8e8e",
+          "mode": "fixed"
+         }
+        }
+       ]
+      }
+     ]
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 12,
+     "x": 12,
+     "y": 15
+    },
+    "id": 11,
+    "options": {
+     "legend": {
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "tooltip": {
+      "mode": "multi",
+      "sort": "desc"
+     }
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "time_series",
+      "rawQuery": true,
+      "rawSql": "SELECT $__timeGroupAlias(\"startTime\", $bucket), CASE WHEN model_group IN ('glm52', 'glm5.1-w8a8', 'glm53', 'glm5.1') THEN 'glm-text' WHEN model_group IN ('deepseek-v4-flash', 'deepseek-v4-flash0731') THEN 'deepseek-v4-flash' ELSE COALESCE(NULLIF(model_group, ''), '<none>') END AS metric, ROUND(AVG(EXTRACT(EPOCH FROM (\"completionStartTime\" - \"startTime\")) * 1000)::numeric, 0) AS ttft_ms FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND status = 'success' AND proxy_server_request->>'stream' = 'true' AND \"completionStartTime\" > \"startTime\" AND api_key IN (${key_group:sqlstring}) GROUP BY 1, 2 ORDER BY 1, 2",
+      "refId": "A"
+     }
+    ],
+    "title": "N6 TTFT per $bucket (avg ms, stream only)",
+    "type": "timeseries"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "description": "E2E = endTime - startTime = request_duration_ms (verified equal within 1ms rounding). Same metric as 'Avg latency'; shown here scoped to streaming requests.",
+    "fieldConfig": {
+     "defaults": {
+      "custom": {
+       "barAlignment": 0,
+       "drawStyle": "line",
+       "fillOpacity": 10,
+       "gradientMode": "none",
+       "lineInterpolation": "smooth",
+       "lineWidth": 2,
+       "pointSize": 5,
+       "showPoints": "never",
+       "spanNulls": true,
+       "stacking": {
+        "group": "A",
+        "mode": "none"
+       }
+      },
+      "unit": "ms"
+     },
+     "overrides": [
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "glm-text"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "green",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "deepseek-v4-flash"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "blue",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "glm53-flash"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "orange",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "Search Agent"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "purple",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "<none>"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "#8e8e8e",
+          "mode": "fixed"
+         }
+        }
+       ]
+      }
+     ]
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 8,
+     "x": 0,
+     "y": 23
+    },
+    "id": 12,
+    "options": {
+     "legend": {
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "tooltip": {
+      "mode": "multi",
+      "sort": "desc"
+     }
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "time_series",
+      "rawQuery": true,
+      "rawSql": "SELECT $__timeGroupAlias(\"startTime\", $bucket), CASE WHEN model_group IN ('glm52', 'glm5.1-w8a8', 'glm53', 'glm5.1') THEN 'glm-text' WHEN model_group IN ('deepseek-v4-flash', 'deepseek-v4-flash0731') THEN 'deepseek-v4-flash' ELSE COALESCE(NULLIF(model_group, ''), '<none>') END AS metric, ROUND(AVG(EXTRACT(EPOCH FROM (\"endTime\" - \"startTime\")) * 1000)::numeric, 0) AS e2e_ms FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND status = 'success' AND proxy_server_request->>'stream' = 'true' AND \"completionStartTime\" > \"startTime\" AND api_key IN (${key_group:sqlstring}) GROUP BY 1, 2 ORDER BY 1, 2",
+      "refId": "A"
+     }
+    ],
+    "title": "N7 E2E Latency per $bucket (avg ms, stream only)",
+    "type": "timeseries"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "description": "Ctrl+click a legend label to remove just that series (click again to restore). Plain click isolates it instead. | glm53-flash (n+s): non-stream + stream combined. Stream rows use real generation window (endTime - completionStartTime). Non-stream rows are APPROXIMATED with a fixed TTFT of 1 s: generation = E2E - 1 s, TPOT = (E2E - 1 s) / completion_tokens. All other series remain streaming-only.",
+    "fieldConfig": {
+     "defaults": {
+      "custom": {
+       "barAlignment": 0,
+       "drawStyle": "line",
+       "fillOpacity": 10,
+       "gradientMode": "none",
+       "lineInterpolation": "smooth",
+       "lineWidth": 2,
+       "pointSize": 5,
+       "showPoints": "never",
+       "spanNulls": true,
+       "stacking": {
+        "group": "A",
+        "mode": "none"
+       }
+      },
+      "unit": "ms"
+     },
+     "overrides": [
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "glm-text"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "green",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "deepseek-v4-flash"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "blue",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "glm53-flash(s)"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "orange",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "Search Agent"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "purple",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "<none>"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "#8e8e8e",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "glm53-flash (n+s)"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "#FFB380",
+          "mode": "fixed"
+         }
+        }
+       ]
+      }
+     ]
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 8,
+     "x": 8,
+     "y": 23
+    },
+    "id": 13,
+    "options": {
+     "legend": {
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "tooltip": {
+      "mode": "multi",
+      "sort": "desc"
+     }
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "time_series",
+      "rawQuery": true,
+      "rawSql": "SELECT $__timeGroupAlias(\"startTime\", $bucket), CASE WHEN model_group IN ('glm52', 'glm5.1-w8a8', 'glm53', 'glm5.1') THEN 'glm-text' WHEN model_group IN ('deepseek-v4-flash', 'deepseek-v4-flash0731') THEN 'deepseek-v4-flash' WHEN model_group = 'glm53-flash' THEN 'glm53-flash(s)' ELSE COALESCE(NULLIF(model_group, ''), '<none>') END AS metric, ROUND(AVG(EXTRACT(EPOCH FROM (\"endTime\" - \"completionStartTime\")) * 1000 / NULLIF(completion_tokens, 0))::numeric, 1) AS tpot_ms FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND status = 'success' AND \"completionStartTime\" > \"startTime\" AND proxy_server_request->>'stream' = 'true' AND EXTRACT(EPOCH FROM (\"endTime\" - \"completionStartTime\")) >= 1 AND completion_tokens > 0 AND api_key IN (${key_group:sqlstring}) GROUP BY 1, 2 ORDER BY 1, 2",
+      "refId": "A"
+     },
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "time_series",
+      "rawQuery": true,
+      "rawSql": "SELECT $__timeGroupAlias(\"startTime\", $bucket),\n  'glm53-flash (n+s)' AS metric,\n  ROUND(AVG(\n    CASE\n      WHEN COALESCE(proxy_server_request->>'stream','false') <> 'true'\n        THEN (EXTRACT(EPOCH FROM (\"endTime\" - \"startTime\")) * 1000 - 1000) / NULLIF(completion_tokens, 0)\n      ELSE EXTRACT(EPOCH FROM (\"endTime\" - \"completionStartTime\")) * 1000 / NULLIF(completion_tokens, 0)\n    END\n  )::numeric, 1) AS tpot_ms\nFROM \"LiteLLM_SpendLogs\"\nWHERE $__timeFilter(\"startTime\")\n  AND status = 'success'\n  AND model_group = 'glm53-flash'\n  AND \"endTime\" > \"startTime\"\n  AND completion_tokens > 0\n  AND api_key IN (${key_group:sqlstring})\n  AND (\n    (COALESCE(proxy_server_request->>'stream','false') <> 'true'\n       AND EXTRACT(EPOCH FROM (\"endTime\" - \"startTime\")) * 1000 > 1000)\n    OR (proxy_server_request->>'stream' = 'true'\n       AND \"completionStartTime\" > \"startTime\"\n       AND EXTRACT(EPOCH FROM (\"endTime\" - \"completionStartTime\")) >= 1)\n  )\nGROUP BY 1, 2\nORDER BY 1, 2",
+      "refId": "B"
+     }
+    ],
+    "title": "N8 TPOT per $bucket (ms/output tok; glm53-flash(s) stream only, (n+s) approx 1s TTFT)",
+    "type": "timeseries"
+   },
+   {
+    "collapsed": false,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 32
+    },
+    "id": 14,
+    "panels": [],
+    "title": "Model Groups",
+    "type": "row"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "description": "avg_input/avg_output exclude requests with input+output < 150 tokens; request counts, totals and maxes include ALL requests in scope.",
+    "fieldConfig": {
+     "defaults": {},
+     "overrides": [
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "avg_input_tokens"
+       },
+       "properties": [
+        {
+         "id": "unit",
+         "value": "short"
+        },
+        {
+         "id": "displayName",
+         "value": "avg_input_tokens"
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "avg_output_tokens"
+       },
+       "properties": [
+        {
+         "id": "unit",
+         "value": "short"
+        },
+        {
+         "id": "displayName",
+         "value": "avg_output_tokens"
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "completion_tokens"
+       },
+       "properties": [
+        {
+         "id": "unit",
+         "value": "short"
+        },
+        {
+         "id": "displayName",
+         "value": "completion_tokens"
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "max_input_tokens"
+       },
+       "properties": [
+        {
+         "id": "unit",
+         "value": "short"
+        },
+        {
+         "id": "displayName",
+         "value": "max_input_tokens"
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "max_output_tokens"
+       },
+       "properties": [
+        {
+         "id": "unit",
+         "value": "short"
+        },
+        {
+         "id": "displayName",
+         "value": "max_output_tokens"
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "max_tokens"
+       },
+       "properties": [
+        {
+         "id": "unit",
+         "value": "short"
+        },
+        {
+         "id": "displayName",
+         "value": "max_tokens"
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "prompt_tokens"
+       },
+       "properties": [
+        {
+         "id": "unit",
+         "value": "short"
+        },
+        {
+         "id": "displayName",
+         "value": "prompt_tokens"
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "total_input_tokens"
+       },
+       "properties": [
+        {
+         "id": "unit",
+         "value": "short"
+        },
+        {
+         "id": "displayName",
+         "value": "total_input_tokens"
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "total_output_tokens"
+       },
+       "properties": [
+        {
+         "id": "unit",
+         "value": "short"
+        },
+        {
+         "id": "displayName",
+         "value": "total_output_tokens"
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "total_tokens"
+       },
+       "properties": [
+        {
+         "id": "unit",
+         "value": "short"
+        },
+        {
+         "id": "displayName",
+         "value": "total_tokens"
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "request_count"
+       },
+       "properties": [
+        {
+         "id": "unit",
+         "value": "locale"
+        }
+       ]
+      }
+     ]
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 24,
+     "x": 0,
+     "y": 33
+    },
+    "id": 15,
+    "options": {
+     "cellHeight": "sm",
+     "showHeader": true
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "table",
+      "rawQuery": true,
+      "rawSql": "SELECT CASE WHEN model_group IN ('glm52', 'glm5.1-w8a8', 'glm53', 'glm5.1') THEN 'glm-text' WHEN model_group IN ('deepseek-v4-flash', 'deepseek-v4-flash0731') THEN 'deepseek-v4-flash' ELSE COALESCE(NULLIF(model_group, ''), '<none>') END AS model_group, ROUND(SUM(total_tokens)) AS total_tokens, COUNT(*) AS request_count, ROUND(SUM(prompt_tokens)) AS total_input_tokens, SUM(completion_tokens) AS total_output_tokens, ROUND(AVG(prompt_tokens) FILTER (WHERE \"prompt_tokens\" + \"completion_tokens\" >= 150)) AS avg_input_tokens, ROUND(AVG(completion_tokens) FILTER (WHERE \"prompt_tokens\" + \"completion_tokens\" >= 150)) AS avg_output_tokens, ROUND(MAX(prompt_tokens)) AS max_input_tokens, MAX(completion_tokens) AS max_output_tokens, ROUND(MAX(prompt_tokens + completion_tokens)) AS max_tokens FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring}) GROUP BY 1 ORDER BY total_tokens DESC",
+      "refId": "A"
+     }
+    ],
+    "title": "N10 Model Group Business Data Sheet",
+    "type": "table"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "fieldConfig": {
+     "defaults": {},
+     "overrides": [
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "total_tokens"
+       },
+       "properties": [
+        {
+         "id": "unit",
+         "value": "short"
+        },
+        {
+         "id": "displayName",
+         "value": "total_tokens"
+        }
+       ]
+      }
+     ]
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 24,
+     "x": 0,
+     "y": 49
+    },
+    "id": 16,
+    "options": {
+     "cellHeight": "sm",
+     "showHeader": true
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "table",
+      "rawQuery": true,
+      "rawSql": "SELECT CASE WHEN model_group IN ('glm52', 'glm5.1-w8a8', 'glm53', 'glm5.1') THEN 'glm-text' WHEN model_group IN ('deepseek-v4-flash', 'deepseek-v4-flash0731') THEN 'deepseek-v4-flash' ELSE COALESCE(NULLIF(model_group, ''), '<none>') END AS model_group, model, COUNT(*) AS requests, ROUND(SUM(total_tokens)) AS total_tokens FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring}) GROUP BY 1, 2 ORDER BY total_tokens DESC LIMIT 100",
+      "refId": "A"
+     }
+    ],
+    "title": "N13 Model Group → Underlying Models",
+    "type": "table"
+   },
+   {
+    "collapsed": false,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 58
+    },
+    "id": 17,
+    "panels": [],
+    "title": "Request Tags Matrix",
+    "type": "row"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "description": "Rows = client extracted from request_tags (User-Agent), columns = merged model groups, cells = request count.",
+    "fieldConfig": {
+     "defaults": {},
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 10,
+     "w": 24,
+     "x": 0,
+     "y": 59
+    },
+    "id": 18,
+    "options": {
+     "cellHeight": "sm",
+     "showHeader": true
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "table",
+      "rawQuery": true,
+      "rawSql": "SELECT COALESCE(split_part(request_tags->>0, ': ', 2), '<none>') AS client, COUNT(*) FILTER (WHERE model_group IN ('glm52', 'glm5.1-w8a8', 'glm53', 'glm5.1')) AS \"glm-text\", COUNT(*) FILTER (WHERE model_group IN ('deepseek-v4-flash', 'deepseek-v4-flash0731')) AS \"deepseek-v4-flash\", COUNT(*) FILTER (WHERE model_group = 'glm53-flash') AS \"glm53-flash\", COUNT(*) FILTER (WHERE model_group NOT IN ('glm52', 'glm5.1-w8a8', 'glm53', 'glm5.1', 'deepseek-v4-flash', 'deepseek-v4-flash0731', 'glm53-flash')) AS \"other\", COUNT(*) AS total FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring}) GROUP BY 1 ORDER BY total DESC LIMIT 20",
+      "refId": "A"
+     }
+    ],
+    "title": "N14 Client × Model Group Matrix",
+    "type": "table"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "description": "Non-stream (buffered) requests only: gen window < 1s. Time-to-first-token divided by input tokens = prompt processing throughput (ms per input token). Lower = faster.",
+    "fieldConfig": {
+     "defaults": {
+      "custom": {
+       "barAlignment": 0,
+       "drawStyle": "line",
+       "fillOpacity": 10,
+       "gradientMode": "none",
+       "lineInterpolation": "smooth",
+       "lineWidth": 2,
+       "pointSize": 5,
+       "showPoints": "never",
+       "spanNulls": true,
+       "stacking": {
+        "group": "A",
+        "mode": "none"
+       }
+      },
+      "unit": "ms"
+     },
+     "overrides": [
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "glm-text"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "green",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "deepseek-v4-flash"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "blue",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "glm53-flash"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "orange",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "Search Agent"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "purple",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "<none>"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "#8e8e8e",
+          "mode": "fixed"
+         }
+        }
+       ]
+      }
+     ]
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 8,
+     "x": 16,
+     "y": 23
+    },
+    "id": 19,
+    "options": {
+     "legend": {
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "tooltip": {
+      "mode": "multi",
+      "sort": "desc"
+     }
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "time_series",
+      "rawQuery": true,
+      "rawSql": "SELECT $__timeGroupAlias(\"startTime\", $bucket), CASE WHEN model_group IN ('glm52', 'glm5.1-w8a8', 'glm53', 'glm5.1') THEN 'glm-text' WHEN model_group IN ('deepseek-v4-flash', 'deepseek-v4-flash0731') THEN 'deepseek-v4-flash' ELSE COALESCE(NULLIF(model_group, ''), '<none>') END AS metric, ROUND(AVG(EXTRACT(EPOCH FROM (\"completionStartTime\" - \"startTime\")) * 1000 / NULLIF(prompt_tokens, 0))::numeric, 2) AS nsttft_ms FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND status = 'success' AND \"completionStartTime\" > \"startTime\" AND COALESCE(proxy_server_request->>'stream','false') <> 'true' AND prompt_tokens > 0 AND api_key IN (${key_group:sqlstring}) GROUP BY 1, 2 ORDER BY 1, 2",
+      "refId": "A"
+     }
+    ],
+    "title": "N9 Non-stream TTFT per Input Token ($bucket, ms/input tok)",
+    "type": "timeseries"
+   },
+   {
+    "datasource": {
+     "type": "grafana-postgresql-datasource",
+     "uid": "P98809E0A67B9D897"
+    },
+    "description": "Hour of day in Asia/Riyadh local time (startTime is stored UTC; converted +3h). Buckets are hour-of-day across the whole selected time range.",
+    "fieldConfig": {
+     "defaults": {
+      "custom": {
+       "fillOpacity": 80
+      },
+      "unit": "locale"
+     },
+     "overrides": [
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "glm-text"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "green",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "deepseek-v4-flash"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "blue",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "glm53-flash"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "orange",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "<none>"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "#8e8e8e",
+          "mode": "fixed"
+         }
+        }
+       ]
+      }
+     ]
+    },
+    "gridPos": {
+     "h": 9,
+     "w": 12,
+     "x": 0,
+     "y": 69
+    },
+    "id": 26,
+    "options": {
+     "barWidth": 0.97,
+     "groupWidth": 0.7,
+     "legend": {
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "orientation": "auto",
+     "showValue": "never",
+     "stacking": "normal",
+     "tooltip": {
+      "mode": "multi",
+      "sort": "desc"
+     },
+     "xField": "hour",
+     "xTickLabelRotation": 0,
+     "xTickLabelSpacing": 200
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "grafana-postgresql-datasource",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "table",
+      "rawQuery": true,
+      "rawSql": "SELECT\n  LPAD(h.hr::text, 2, '0') AS hour,\n  COUNT(*) FILTER (WHERE s.grp = 'glm-text') AS \"glm-text\",\n  COUNT(*) FILTER (WHERE s.grp = 'deepseek-v4-flash') AS \"deepseek-v4-flash\",\n  COUNT(*) FILTER (WHERE s.grp = 'glm53-flash') AS \"glm53-flash\",\n  COUNT(*) FILTER (WHERE s.grp = '<none>') AS \"<none>\"\nFROM generate_series(0, 23) AS h(hr)\nLEFT JOIN (\n  SELECT \"startTime\", CASE WHEN model_group IN ('glm52','glm5.1-w8a8','glm53','glm5.1') THEN 'glm-text' WHEN model_group IN ('deepseek-v4-flash','deepseek-v4-flash0731') THEN 'deepseek-v4-flash' ELSE COALESCE(NULLIF(model_group,''),'<none>') END AS grp\n  FROM \"LiteLLM_SpendLogs\"\n  WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring})\n) s ON EXTRACT(HOUR FROM (s.\"startTime\" AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Riyadh'))::int = h.hr\nGROUP BY h.hr\nORDER BY h.hr",
+      "refId": "A"
+     }
+    ],
+    "title": "N15 Requests by Hour of Day (peak-hour analysis)",
+    "type": "barchart"
+   },
+   {
+    "datasource": {
+     "type": "grafana-postgresql-datasource",
+     "uid": "P98809E0A67B9D897"
+    },
+    "description": "Hour of day in Asia/Riyadh local time (startTime is stored UTC; converted +3h). Buckets are hour-of-day across the whole selected time range.",
+    "fieldConfig": {
+     "defaults": {
+      "custom": {
+       "fillOpacity": 80
+      },
+      "unit": "short"
+     },
+     "overrides": [
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "glm-text"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "green",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "deepseek-v4-flash"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "blue",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "glm53-flash"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "orange",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "<none>"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "#8e8e8e",
+          "mode": "fixed"
+         }
+        }
+       ]
+      }
+     ]
+    },
+    "gridPos": {
+     "h": 9,
+     "w": 12,
+     "x": 12,
+     "y": 69
+    },
+    "id": 27,
+    "options": {
+     "barWidth": 0.97,
+     "groupWidth": 0.7,
+     "legend": {
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "orientation": "auto",
+     "showValue": "never",
+     "stacking": "normal",
+     "tooltip": {
+      "mode": "multi",
+      "sort": "desc"
+     },
+     "xField": "hour",
+     "xTickLabelRotation": 0,
+     "xTickLabelSpacing": 200
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "grafana-postgresql-datasource",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "table",
+      "rawQuery": true,
+      "rawSql": "SELECT\n  LPAD(h.hr::text, 2, '0') AS hour,\n  COALESCE(ROUND(SUM(s.total_tokens) FILTER (WHERE s.grp = 'glm-text')), 0) AS \"glm-text\",\n  COALESCE(ROUND(SUM(s.total_tokens) FILTER (WHERE s.grp = 'deepseek-v4-flash')), 0) AS \"deepseek-v4-flash\",\n  COALESCE(ROUND(SUM(s.total_tokens) FILTER (WHERE s.grp = 'glm53-flash')), 0) AS \"glm53-flash\",\n  COALESCE(ROUND(SUM(s.total_tokens) FILTER (WHERE s.grp = '<none>')), 0) AS \"<none>\"\nFROM generate_series(0, 23) AS h(hr)\nLEFT JOIN (\n  SELECT \"startTime\", total_tokens, CASE WHEN model_group IN ('glm52','glm5.1-w8a8','glm53','glm5.1') THEN 'glm-text' WHEN model_group IN ('deepseek-v4-flash','deepseek-v4-flash0731') THEN 'deepseek-v4-flash' ELSE COALESCE(NULLIF(model_group,''),'<none>') END AS grp\n  FROM \"LiteLLM_SpendLogs\"\n  WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring})\n) s ON EXTRACT(HOUR FROM (s.\"startTime\" AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Riyadh'))::int = h.hr\nGROUP BY h.hr\nORDER BY h.hr",
+      "refId": "A"
+     }
+    ],
+    "title": "N16 Tokens by Hour of Day (peak-hour analysis)",
+    "type": "barchart"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "description": "Bar trend of glm53-flash requests split by content: 'with image' = request contains image_url parts in proxy_server_request.messages; 'text only' = no images. Scope: selected time range + key group, glm53-flash only. Bucket: $bucket.",
+    "fieldConfig": {
+     "defaults": {
+      "custom": {
+       "barAlignment": 0,
+       "drawStyle": "bars",
+       "fillOpacity": 100,
+       "gradientMode": "none",
+       "lineInterpolation": "linear",
+       "lineWidth": 1,
+       "showPoints": "never",
+       "spanNulls": true,
+       "stacking": {
+        "group": "A",
+        "mode": "normal"
+       }
+      },
+      "unit": "locale"
+     },
+     "overrides": [
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "with image"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "orange",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "text only"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "#8e8e8e",
+          "mode": "fixed"
+         }
+        }
+       ]
+      }
+     ]
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 24,
+     "x": 0,
+     "y": 41
+    },
+    "id": 28,
+    "options": {
+     "legend": {
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "tooltip": {
+      "mode": "multi",
+      "sort": "desc"
+     }
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "time_series",
+      "rawQuery": true,
+      "rawSql": "SELECT\n  $__timeGroupAlias(s.\"startTime\", $bucket),\n  CASE WHEN ic.imgs > 0 THEN 'with image' ELSE 'text only' END AS metric,\n  COUNT(*) AS requests\nFROM \"LiteLLM_SpendLogs\" s\nCROSS JOIN LATERAL (\n  SELECT count(*) AS imgs\n  FROM jsonb_array_elements(\n    CASE WHEN jsonb_typeof(s.proxy_server_request->'messages')='array'\n         THEN s.proxy_server_request->'messages' ELSE '[]'::jsonb END) m\n  CROSS JOIN LATERAL jsonb_array_elements(\n    CASE WHEN jsonb_typeof(m->'content')='array' THEN m->'content' ELSE '[]'::jsonb END) c\n  WHERE c->>'type'='image_url'\n) ic\nWHERE $__timeFilter(s.\"startTime\")\n  AND s.api_key IN (${key_group:sqlstring})\n  AND s.model_group = 'glm53-flash'\nGROUP BY 1, 2\nORDER BY 1, 2",
+      "refId": "A"
+     }
+    ],
+    "title": "N11 glm53-flash Image Requests Trend",
+    "type": "timeseries"
+   },
+   {
+    "datasource": {
+     "type": "grafana-postgresql-datasource",
+     "uid": "P98809E0A67B9D897"
+    },
+    "description": "Total glm53-flash requests containing at least one image_url part in proxy_server_request.messages. Scope: selected time range + key group.",
+    "fieldConfig": {
+     "defaults": {
+      "color": {
+       "fixedColor": "orange",
+       "mode": "fixed"
+      },
+      "mappings": [],
+      "thresholds": {
+       "mode": "absolute",
+       "steps": [
+        {
+         "color": "green",
+         "value": null
+        }
+       ]
+      },
+      "unit": "locale"
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 4,
+     "w": 4,
+     "x": 20,
+     "y": 1
+    },
+    "id": 29,
+    "options": {
+     "colorMode": "value",
+     "graphMode": "none",
+     "justifyMode": "auto",
+     "orientation": "auto",
+     "percentChangeColorMode": "standard",
+     "reduceOptions": {
+      "calcs": [
+       "lastNotNull"
+      ],
+      "fields": "/^image_requests$/",
+      "values": false
+     },
+     "showPercentChange": false,
+     "textMode": "auto",
+     "wideLayout": true
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "grafana-postgresql-datasource",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "table",
+      "rawQuery": true,
+      "rawSql": "SELECT COUNT(*) AS image_requests\nFROM \"LiteLLM_SpendLogs\" s\nCROSS JOIN LATERAL (\n  SELECT count(*) AS imgs\n  FROM jsonb_array_elements(\n    CASE WHEN jsonb_typeof(s.proxy_server_request->'messages')='array'\n         THEN s.proxy_server_request->'messages' ELSE '[]'::jsonb END) m\n  CROSS JOIN LATERAL jsonb_array_elements(\n    CASE WHEN jsonb_typeof(m->'content')='array' THEN m->'content' ELSE '[]'::jsonb END) c\n  WHERE c->>'type'='image_url'\n) ic\nWHERE $__timeFilter(s.\"startTime\")\n  AND s.api_key IN (${key_group:sqlstring})\n  AND s.model_group = 'glm53-flash'\n  AND ic.imgs > 0",
+      "refId": "A"
+     }
+    ],
+    "title": "Image Requests (glm53-flash)",
+    "type": "stat"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "description": "Same scope and grouping as the top token chart; values in millions (M). Requests with empty model_group are excluded (no <none> series).",
+    "fieldConfig": {
+     "defaults": {
+      "custom": {
+       "barAlignment": 0,
+       "drawStyle": "bars",
+       "fillOpacity": 100,
+       "gradientMode": "none",
+       "lineInterpolation": "linear",
+       "lineWidth": 1,
+       "showPoints": "never",
+       "spanNulls": true,
+       "stacking": {
+        "group": "A",
+        "mode": "normal"
+       }
+      },
+      "unit": "short"
+     },
+     "overrides": [
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "glm-text"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "green",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "deepseek-v4-flash"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "blue",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "glm53-flash"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "orange",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "Search Agent"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "purple",
+          "mode": "fixed"
+         }
+        }
+       ]
+      }
+     ]
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 8,
+     "x": 0,
+     "y": 78
+    },
+    "id": 30,
+    "options": {
+     "legend": {
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "tooltip": {
+      "mode": "multi",
+      "sort": "desc"
+     }
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "time_series",
+      "rawQuery": true,
+      "rawSql": "SELECT $__timeGroupAlias(\"startTime\", $bucket), CASE WHEN model_group IN ('glm52', 'glm5.1-w8a8', 'glm53', 'glm5.1') THEN 'glm-text' WHEN model_group IN ('deepseek-v4-flash', 'deepseek-v4-flash0731') THEN 'deepseek-v4-flash' ELSE model_group END AS metric, ROUND(SUM(total_tokens) * 13) AS tokens FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring}) AND COALESCE(model_group, '') <> '' GROUP BY 1, 2 ORDER BY 1, 2",
+      "refId": "A"
+     }
+    ],
+    "title": "N17 Tokens per $bucket (x13 est., no <none>)",
+    "type": "timeseries"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "description": "Request trend bucketed by request COMPLETION time (endTime), unlike the leading chart which buckets by startTime. Same merged model groups, $bucket, key-group scope and stacked-bar style as the leading requests chart. Requests without endTime are excluded.",
+    "fieldConfig": {
+     "defaults": {
+      "custom": {
+       "barAlignment": 0,
+       "drawStyle": "bars",
+       "fillOpacity": 100,
+       "gradientMode": "none",
+       "lineInterpolation": "linear",
+       "lineWidth": 1,
+       "showPoints": "never",
+       "spanNulls": true,
+       "stacking": {
+        "group": "A",
+        "mode": "normal"
+       }
+      },
+      "unit": "locale"
+     },
+     "overrides": [
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "glm-text"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "green",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "deepseek-v4-flash"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "blue",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "glm53-flash"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "orange",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "Search Agent"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "purple",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "<none>"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "#8e8e8e",
+          "mode": "fixed"
+         }
+        }
+       ]
+      }
+     ]
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 8,
+     "x": 8,
+     "y": 78
+    },
+    "id": 31,
+    "options": {
+     "legend": {
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "tooltip": {
+      "mode": "multi",
+      "sort": "desc"
+     }
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "time_series",
+      "rawQuery": true,
+      "rawSql": "SELECT $__timeGroupAlias(\"endTime\", $bucket), CASE WHEN model_group IN ('glm52', 'glm5.1-w8a8', 'glm53', 'glm5.1') THEN 'glm-text' WHEN model_group IN ('deepseek-v4-flash', 'deepseek-v4-flash0731') THEN 'deepseek-v4-flash' ELSE COALESCE(NULLIF(model_group, ''), '<none>') END AS metric, COUNT(*) AS requests FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"endTime\") AND api_key IN (${key_group:sqlstring}) GROUP BY 1, 2 ORDER BY 1, 2",
+      "refId": "A"
+     }
+    ],
+    "title": "N18 Requests per $bucket (completion time)",
+    "type": "timeseries"
+   },
+   {
+    "collapsed": true,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 57
+    },
+    "id": 32,
+    "panels": [
+     {
+      "datasource": {
+       "type": "grafana-postgresql-datasource",
+       "uid": "P98809E0A67B9D897"
+      },
+      "description": "All glm53-flash requests containing image_url parts in the request. image_count = number of image parts parsed from messages. Image-specific token counts are not reported upstream (prompt_tokens_details.image_tokens is null), so input/output tokens are the request totals.",
+      "fieldConfig": {
+       "defaults": {
+        "custom": {
+         "align": "left",
+         "cellOptions": {
+          "type": "auto"
+         },
+         "inspect": false
+        }
+       },
+       "overrides": []
+      },
+      "gridPos": {
+       "h": 9,
+       "w": 24,
+       "x": 0,
+       "y": 55
+      },
+      "id": 25,
+      "options": {
+       "showHeader": true
+      },
+      "targets": [
+       {
+        "datasource": {
+         "type": "grafana-postgresql-datasource",
+         "uid": "P98809E0A67B9D897"
+        },
+        "editorMode": "code",
+        "format": "table",
+        "rawQuery": true,
+        "rawSql": "SELECT\n  s.\"startTime\" AS time,\n  s.request_id,\n  s.metadata->>'user_api_key_alias' AS key_alias,\n  s.model_group,\n  s.status,\n  s.prompt_tokens AS input_tokens,\n  s.completion_tokens AS output_tokens,\n  ic.imgs AS image_count,\n  LEFT(COALESCE(s.metadata->'error_information'->>'error_message','-'),60) AS error\nFROM \"LiteLLM_SpendLogs\" s\nCROSS JOIN LATERAL (\n  SELECT count(*) AS imgs\n  FROM jsonb_array_elements(\n    CASE WHEN jsonb_typeof(s.proxy_server_request->'messages')='array'\n         THEN s.proxy_server_request->'messages' ELSE '[]'::jsonb END) m\n  CROSS JOIN LATERAL jsonb_array_elements(\n    CASE WHEN jsonb_typeof(m->'content')='array' THEN m->'content' ELSE '[]'::jsonb END) c\n  WHERE c->>'type'='image_url'\n) ic\nWHERE $__timeFilter(s.\"startTime\")\n  AND s.api_key IN (${key_group:sqlstring})\n  AND s.model_group = 'glm53-flash'\n  AND ic.imgs > 0\nORDER BY s.\"startTime\" DESC\nLIMIT 500",
+        "refId": "A"
+       }
+      ],
+      "title": "glm53-flash Image Requests (latest 500)",
+      "type": "table"
+     }
+    ],
+    "title": "glm53-flash Image Requests (click to load)",
+    "type": "row"
+   },
+   {
+    "collapsed": true,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 5
+    },
+    "id": 35,
+    "panels": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "description": "Sum of prompt_tokens per time bucket, divided by 1000 and shown in K. Scope: selected time range + key group. Collapsed by default; click the row to load.",
+      "fieldConfig": {
+       "defaults": {
+        "custom": {
+         "barAlignment": 0,
+         "drawStyle": "bars",
+         "fillOpacity": 100,
+         "gradientMode": "none",
+         "lineInterpolation": "linear",
+         "lineWidth": 1,
+         "showPoints": "never",
+         "spanNulls": true,
+         "stacking": {
+          "group": "A",
+          "mode": "normal"
+         }
+        },
+        "unit": "short"
+       },
+       "overrides": [
+        {
+         "matcher": {
+          "id": "byName",
+          "options": "glm-text"
+         },
+         "properties": [
+          {
+           "id": "color",
+           "value": {
+            "fixedColor": "green",
+            "mode": "fixed"
+           }
+          }
+         ]
+        },
+        {
+         "matcher": {
+          "id": "byName",
+          "options": "deepseek-v4-flash"
+         },
+         "properties": [
+          {
+           "id": "color",
+           "value": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+           }
+          }
+         ]
+        },
+        {
+         "matcher": {
+          "id": "byName",
+          "options": "glm53-flash"
+         },
+         "properties": [
+          {
+           "id": "color",
+           "value": {
+            "fixedColor": "orange",
+            "mode": "fixed"
+           }
+          }
+         ]
+        },
+        {
+         "matcher": {
+          "id": "byName",
+          "options": "Search Agent"
+         },
+         "properties": [
+          {
+           "id": "color",
+           "value": {
+            "fixedColor": "purple",
+            "mode": "fixed"
+           }
+          }
+         ]
+        },
+        {
+         "matcher": {
+          "id": "byName",
+          "options": "<none>"
+         },
+         "properties": [
+          {
+           "id": "color",
+           "value": {
+            "fixedColor": "#8e8e8e",
+            "mode": "fixed"
+           }
+          }
+         ]
+        }
+       ]
+      },
+      "gridPos": {
+       "h": 8,
+       "w": 12,
+       "x": 0,
+       "y": 6
+      },
+      "id": 33,
+      "options": {
+       "legend": {
+        "displayMode": "list",
+        "placement": "bottom",
+        "showLegend": true
+       },
+       "tooltip": {
+        "mode": "multi",
+        "sort": "desc"
+       }
+      },
+      "targets": [
+       {
+        "datasource": {
+         "type": "postgres",
+         "uid": "P98809E0A67B9D897"
+        },
+        "editorMode": "code",
+        "format": "time_series",
+        "rawQuery": true,
+        "rawSql": "SELECT $__timeGroupAlias(\"startTime\", $bucket), CASE WHEN model_group IN ('glm52', 'glm5.1-w8a8', 'glm53', 'glm5.1') THEN 'glm-text' WHEN model_group IN ('deepseek-v4-flash', 'deepseek-v4-flash0731') THEN 'deepseek-v4-flash' ELSE COALESCE(NULLIF(model_group, ''), '<none>') END AS metric, ROUND(SUM(prompt_tokens)) AS tokens FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring}) GROUP BY 1, 2 ORDER BY 1, 2",
+        "refId": "A"
+       }
+      ],
+      "title": "N3 Input Tokens per $bucket",
+      "type": "timeseries"
+     },
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "description": "Sum of completion_tokens per time bucket, RAW values (not divided). Scope: selected time range + key group. Collapsed by default; click the row to load.",
+      "fieldConfig": {
+       "defaults": {
+        "custom": {
+         "barAlignment": 0,
+         "drawStyle": "bars",
+         "fillOpacity": 100,
+         "gradientMode": "none",
+         "lineInterpolation": "linear",
+         "lineWidth": 1,
+         "showPoints": "never",
+         "spanNulls": true,
+         "stacking": {
+          "group": "A",
+          "mode": "normal"
+         }
+        },
+        "unit": "short"
+       },
+       "overrides": [
+        {
+         "matcher": {
+          "id": "byName",
+          "options": "glm-text"
+         },
+         "properties": [
+          {
+           "id": "color",
+           "value": {
+            "fixedColor": "green",
+            "mode": "fixed"
+           }
+          }
+         ]
+        },
+        {
+         "matcher": {
+          "id": "byName",
+          "options": "deepseek-v4-flash"
+         },
+         "properties": [
+          {
+           "id": "color",
+           "value": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+           }
+          }
+         ]
+        },
+        {
+         "matcher": {
+          "id": "byName",
+          "options": "glm53-flash"
+         },
+         "properties": [
+          {
+           "id": "color",
+           "value": {
+            "fixedColor": "orange",
+            "mode": "fixed"
+           }
+          }
+         ]
+        },
+        {
+         "matcher": {
+          "id": "byName",
+          "options": "Search Agent"
+         },
+         "properties": [
+          {
+           "id": "color",
+           "value": {
+            "fixedColor": "purple",
+            "mode": "fixed"
+           }
+          }
+         ]
+        },
+        {
+         "matcher": {
+          "id": "byName",
+          "options": "<none>"
+         },
+         "properties": [
+          {
+           "id": "color",
+           "value": {
+            "fixedColor": "#8e8e8e",
+            "mode": "fixed"
+           }
+          }
+         ]
+        }
+       ]
+      },
+      "gridPos": {
+       "h": 8,
+       "w": 12,
+       "x": 12,
+       "y": 6
+      },
+      "id": 34,
+      "options": {
+       "legend": {
+        "displayMode": "list",
+        "placement": "bottom",
+        "showLegend": true
+       },
+       "tooltip": {
+        "mode": "multi",
+        "sort": "desc"
+       }
+      },
+      "targets": [
+       {
+        "datasource": {
+         "type": "postgres",
+         "uid": "P98809E0A67B9D897"
+        },
+        "editorMode": "code",
+        "format": "time_series",
+        "rawQuery": true,
+        "rawSql": "SELECT $__timeGroupAlias(\"startTime\", $bucket), CASE WHEN model_group IN ('glm52', 'glm5.1-w8a8', 'glm53', 'glm5.1') THEN 'glm-text' WHEN model_group IN ('deepseek-v4-flash', 'deepseek-v4-flash0731') THEN 'deepseek-v4-flash' ELSE COALESCE(NULLIF(model_group, ''), '<none>') END AS metric, SUM(completion_tokens) AS tokens FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring}) GROUP BY 1, 2 ORDER BY 1, 2",
+        "refId": "A"
+       }
+      ],
+      "title": "N4 Output Tokens per $bucket",
+      "type": "timeseries"
+     }
+    ],
+    "title": "N3/N4 Input/Output Token Trends (click to expand)",
+    "type": "row"
+   },
+   {
+    "collapsed": false,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 6
+    },
+    "id": 36,
+    "panels": [],
+    "title": "Core Trends & Latency (N1/N2, N5-N9)",
+    "type": "row"
+   }
+  ],
+  "refresh": "5m",
+  "schemaVersion": 39,
+  "tags": [
+   "litellm",
+   "llm",
+   "model-group",
+   "barchart"
+  ],
+  "templating": {
+   "list": [
+    {
+     "current": {
+      "selected": true,
+      "text": "5m",
+      "value": "5m"
+     },
+     "hide": 0,
+     "label": "Time gap",
+     "name": "bucket",
+     "options": [
+      {
+       "selected": true,
+       "text": "5m",
+       "value": "5m"
+      },
+      {
+       "selected": false,
+       "text": "10m",
+       "value": "10m"
+      },
+      {
+       "selected": false,
+       "text": "30m",
+       "value": "30m"
+      },
+      {
+       "selected": false,
+       "text": "60m",
+       "value": "60m"
+      },
+      {
+       "selected": false,
+       "text": "2h",
+       "value": "2h"
+      },
+      {
+       "selected": false,
+       "text": "3h",
+       "value": "3h"
+      },
+      {
+       "selected": false,
+       "text": "4h",
+       "value": "4h"
+      },
+      {
+       "selected": false,
+       "text": "12h",
+       "value": "12h"
+      },
+      {
+       "selected": false,
+       "text": "1d",
+       "value": "1d"
+      },
+      {
+       "selected": false,
+       "text": "7d",
+       "value": "7d"
+      }
+     ],
+     "query": "5m,10m,30m,60m,2h,3h,4h,12h,1d,7d",
+     "refresh": 1,
+     "type": "interval"
+    },
+    {
+     "allValue": "",
+     "class": "custom",
+     "current": {
+      "selected": true,
+      "text": [
+       "All"
+      ],
+      "value": [
+       "$__all"
+      ]
+     },
+     "hide": 2,
+     "includeAll": true,
+     "label": "Key Group (in-dashboards key management)",
+     "multi": true,
+     "name": "key_group",
+     "options": [
+      {
+       "selected": true,
+       "text": "All",
+       "value": "$__all"
+      }
+     ],
+     "query": "SEARCH_AGENT_KEY,API_KEY_06,API_KEY_02,API_KEY_07,API_KEY_01,API_KEY_05,API_KEY_03,API_KEY_04",
+     "type": "custom"
+    }
+   ]
+  },
+  "time": {
+   "from": "now/d",
+   "to": "now"
+  },
+  "timezone": "browser",
+  "title": "LiteLLM SpendLogs (by Model Group) — Bars",
+  "uid": "litellm-spendlogs-grouped-bars",
+  "version": 54
+ },
+ "overwrite": true
+}

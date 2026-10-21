@@ -1,0 +1,998 @@
+{
+ "dashboard": {
+  "graphTooltip": 1,
+  "id": 3,
+  "panels": [
+   {
+    "collapsed": false,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 0
+    },
+    "id": 1,
+    "panels": [],
+    "title": "Summary",
+    "type": "row"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "description": "Requests with input+output < 150 tokens are excluded from averages (probe/ping traffic).",
+    "fieldConfig": {
+     "defaults": {
+      "unit": "locale"
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 4,
+     "w": 4,
+     "x": 0,
+     "y": 1
+    },
+    "id": 2,
+    "options": {
+     "colorMode": "value",
+     "graphMode": "area",
+     "reduceOptions": {
+      "calcs": [
+       "lastNotNull"
+      ],
+      "fields": "",
+      "values": false
+     },
+     "textMode": "auto"
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "table",
+      "rawQuery": true,
+      "rawSql": "SELECT ROUND(ROUND(AVG(prompt_tokens))) AS avg_input FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND status = 'success' AND api_key IN (${key_group:sqlstring}) AND (\"prompt_tokens\" + \"completion_tokens\") >= 150",
+      "refId": "A"
+     }
+    ],
+    "title": "Avg Input Tokens / Request",
+    "type": "stat"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "unit": "short"
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 4,
+     "w": 4,
+     "x": 4,
+     "y": 1
+    },
+    "id": 3,
+    "options": {
+     "colorMode": "value",
+     "graphMode": "area",
+     "reduceOptions": {
+      "calcs": [
+       "lastNotNull"
+      ],
+      "fields": "",
+      "values": false
+     },
+     "textMode": "auto"
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "table",
+      "rawQuery": true,
+      "rawSql": "SELECT ROUND(percentile_cont(0.5) WITHIN GROUP (ORDER BY prompt_tokens)::numeric) AS med_input FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND status = 'success' AND api_key IN (${key_group:sqlstring})",
+      "refId": "A"
+     }
+    ],
+    "title": "Median Input Tokens",
+    "type": "stat"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "description": "Requests with input+output < 150 tokens are excluded from averages (probe/ping traffic).",
+    "fieldConfig": {
+     "defaults": {
+      "unit": "locale"
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 4,
+     "w": 4,
+     "x": 8,
+     "y": 1
+    },
+    "id": 4,
+    "options": {
+     "colorMode": "value",
+     "graphMode": "area",
+     "reduceOptions": {
+      "calcs": [
+       "lastNotNull"
+      ],
+      "fields": "",
+      "values": false
+     },
+     "textMode": "auto"
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "table",
+      "rawQuery": true,
+      "rawSql": "SELECT ROUND(AVG(completion_tokens)) AS avg_output FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND status = 'success' AND api_key IN (${key_group:sqlstring}) AND (\"prompt_tokens\" + \"completion_tokens\") >= 150",
+      "refId": "A"
+     }
+    ],
+    "title": "Avg Output Tokens / Request",
+    "type": "stat"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "unit": "short"
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 4,
+     "w": 4,
+     "x": 12,
+     "y": 1
+    },
+    "id": 5,
+    "options": {
+     "colorMode": "value",
+     "graphMode": "area",
+     "reduceOptions": {
+      "calcs": [
+       "lastNotNull"
+      ],
+      "fields": "",
+      "values": false
+     },
+     "textMode": "auto"
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "table",
+      "rawQuery": true,
+      "rawSql": "SELECT ROUND(percentile_cont(0.5) WITHIN GROUP (ORDER BY completion_tokens)) AS med_output FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND status = 'success' AND api_key IN (${key_group:sqlstring})",
+      "refId": "A"
+     }
+    ],
+    "title": "Median Output Tokens",
+    "type": "stat"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "description": "completion_tokens / prompt_tokens. <1 = input-heavy (RAG/summarize), >1 = output-heavy (generation). Requests with input+output < 150 tokens are excluded from averages (probe/ping traffic).",
+    "fieldConfig": {
+     "defaults": {
+      "decimals": 3,
+      "unit": "locale"
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 4,
+     "w": 4,
+     "x": 16,
+     "y": 1
+    },
+    "id": 6,
+    "options": {
+     "colorMode": "value",
+     "graphMode": "area",
+     "reduceOptions": {
+      "calcs": [
+       "lastNotNull"
+      ],
+      "fields": "",
+      "values": false
+     },
+     "textMode": "auto"
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "table",
+      "rawQuery": true,
+      "rawSql": "SELECT ROUND(AVG(completion_tokens::numeric / NULLIF(prompt_tokens, 0)), 3) AS ratio FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND status = 'success' AND prompt_tokens > 0 AND api_key IN (${key_group:sqlstring}) AND (\"prompt_tokens\" + \"completion_tokens\") >= 150",
+      "refId": "A"
+     }
+    ],
+    "title": "Avg Output/Input Ratio",
+    "type": "stat"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "unit": "short"
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 4,
+     "w": 4,
+     "x": 20,
+     "y": 1
+    },
+    "id": 7,
+    "options": {
+     "colorMode": "value",
+     "graphMode": "none",
+     "reduceOptions": {
+      "calcs": [
+       "lastNotNull"
+      ],
+      "fields": "",
+      "values": false
+     },
+     "textMode": "value_and_name"
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "table",
+      "rawQuery": true,
+      "rawSql": "SELECT ROUND(SUM(prompt_tokens)) AS input_tokens, SUM(completion_tokens) AS output_tokens FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND status = 'success' AND api_key IN (${key_group:sqlstring})",
+      "refId": "A"
+     }
+    ],
+    "title": "Total Tokens In/Out",
+    "type": "stat"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "description": "Requests with input+output < 150 tokens are excluded from averages (probe/ping traffic).",
+    "fieldConfig": {
+     "defaults": {
+      "custom": {
+       "fillOpacity": 15,
+       "lineWidth": 1,
+       "showPoints": "never"
+      },
+      "unit": "locale"
+     },
+     "overrides": [
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "glm-text"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "green",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "deepseek-v4-flash"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "blue",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "glm53-flash"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "orange",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "Search Agent"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "purple",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "<none>"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "#8e8e8e",
+          "mode": "fixed"
+         }
+        }
+       ]
+      }
+     ]
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 12,
+     "x": 0,
+     "y": 5
+    },
+    "id": 8,
+    "options": {
+     "legend": {
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "tooltip": {
+      "mode": "multi",
+      "sort": "desc"
+     }
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "time_series",
+      "rawQuery": true,
+      "rawSql": "SELECT $__timeGroupAlias(\"startTime\", $__interval), CASE WHEN model_group IN ('glm52', 'glm5.1-w8a8', 'glm53', 'glm5.1') THEN 'glm-text' WHEN model_group IN ('deepseek-v4-flash', 'deepseek-v4-flash0731') THEN 'deepseek-v4-flash' ELSE COALESCE(NULLIF(model_group, ''), '<none>') END AS metric, ROUND(ROUND(AVG(prompt_tokens))) AS avg_input FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND status = 'success' AND api_key IN (${key_group:sqlstring}) AND (\"prompt_tokens\" + \"completion_tokens\") >= 150 GROUP BY 1, 2 ORDER BY 1, 2",
+      "refId": "A"
+     }
+    ],
+    "title": "N1 Avg Input Tokens per Request (by model group)",
+    "type": "timeseries"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "description": "Requests with input+output < 150 tokens are excluded from averages (probe/ping traffic).",
+    "fieldConfig": {
+     "defaults": {
+      "custom": {
+       "fillOpacity": 15,
+       "lineWidth": 1,
+       "showPoints": "never"
+      },
+      "unit": "locale"
+     },
+     "overrides": [
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "glm-text"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "green",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "deepseek-v4-flash"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "blue",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "glm53-flash"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "orange",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "Search Agent"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "purple",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "<none>"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "#8e8e8e",
+          "mode": "fixed"
+         }
+        }
+       ]
+      }
+     ]
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 12,
+     "x": 12,
+     "y": 5
+    },
+    "id": 9,
+    "options": {
+     "legend": {
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "tooltip": {
+      "mode": "multi",
+      "sort": "desc"
+     }
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "time_series",
+      "rawQuery": true,
+      "rawSql": "SELECT $__timeGroupAlias(\"startTime\", $__interval), CASE WHEN model_group IN ('glm52', 'glm5.1-w8a8', 'glm53', 'glm5.1') THEN 'glm-text' WHEN model_group IN ('deepseek-v4-flash', 'deepseek-v4-flash0731') THEN 'deepseek-v4-flash' ELSE COALESCE(NULLIF(model_group, ''), '<none>') END AS metric, ROUND(AVG(completion_tokens)) AS avg_output FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND status = 'success' AND api_key IN (${key_group:sqlstring}) AND (\"prompt_tokens\" + \"completion_tokens\") >= 150 GROUP BY 1, 2 ORDER BY 1, 2",
+      "refId": "A"
+     }
+    ],
+    "title": "N2 Avg Output Tokens per Request (raw, by model group)",
+    "type": "timeseries"
+   },
+   {
+    "collapsed": false,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 13
+    },
+    "id": 10,
+    "panels": [],
+    "title": "Distributions",
+    "type": "row"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "custom": {
+       "stacking": "normal"
+      },
+      "unit": "short"
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 12,
+     "x": 0,
+     "y": 14
+    },
+    "id": 11,
+    "options": {
+     "barWidth": 0.9,
+     "groupWidth": 0.7,
+     "legend": {
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "orientation": "auto",
+     "showValue": "never",
+     "stacking": "normal",
+     "tooltip": {
+      "mode": "multi",
+      "sort": "desc"
+     },
+     "xTickLabelRotation": 0
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "table",
+      "rawQuery": true,
+      "rawSql": "SELECT CASE WHEN prompt_tokens < 1024 THEN '1: <1k' WHEN prompt_tokens < 4096 THEN '2: 1-4k' WHEN prompt_tokens < 16384 THEN '3: 4-16k' WHEN prompt_tokens < 65536 THEN '4: 16-64k' WHEN prompt_tokens < 262144 THEN '5: 64-256k' ELSE '6: >256k' END AS input_bucket, COUNT(*) FILTER (WHERE model_group IN ('glm52', 'glm5.1-w8a8', 'glm53', 'glm5.1')) AS \"glm-text\", COUNT(*) FILTER (WHERE model_group IN ('deepseek-v4-flash', 'deepseek-v4-flash0731')) AS \"deepseek-v4-flash\", COUNT(*) FILTER (WHERE model_group NOT IN ('glm52', 'glm5.1-w8a8', 'glm53', 'glm5.1', 'deepseek-v4-flash', 'deepseek-v4-flash0731', '')) AS \"other\" FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND status = 'success' AND api_key IN (${key_group:sqlstring}) GROUP BY 1 ORDER BY 1",
+      "refId": "A"
+     }
+    ],
+    "title": "N3 Input Token Distribution",
+    "type": "barchart"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "custom": {
+       "stacking": "normal"
+      },
+      "unit": "short"
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 12,
+     "x": 12,
+     "y": 14
+    },
+    "id": 12,
+    "options": {
+     "barWidth": 0.9,
+     "groupWidth": 0.7,
+     "legend": {
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "orientation": "auto",
+     "showValue": "never",
+     "stacking": "normal",
+     "tooltip": {
+      "mode": "multi",
+      "sort": "desc"
+     },
+     "xTickLabelRotation": 0
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "table",
+      "rawQuery": true,
+      "rawSql": "SELECT CASE WHEN completion_tokens < 256 THEN '1: <256' WHEN completion_tokens < 1024 THEN '2: 256-1k' WHEN completion_tokens < 4096 THEN '3: 1-4k' WHEN completion_tokens < 16384 THEN '4: 4-16k' ELSE '5: >16k' END AS output_bucket, COUNT(*) FILTER (WHERE model_group IN ('glm52', 'glm5.1-w8a8', 'glm53', 'glm5.1')) AS \"glm-text\", COUNT(*) FILTER (WHERE model_group IN ('deepseek-v4-flash', 'deepseek-v4-flash0731')) AS \"deepseek-v4-flash\", COUNT(*) FILTER (WHERE model_group NOT IN ('glm52', 'glm5.1-w8a8', 'glm53', 'glm5.1', 'deepseek-v4-flash', 'deepseek-v4-flash0731', '')) AS \"other\" FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND status = 'success' AND api_key IN (${key_group:sqlstring}) GROUP BY 1 ORDER BY 1",
+      "refId": "A"
+     }
+    ],
+    "title": "N4 Output Token Distribution",
+    "type": "barchart"
+   },
+   {
+    "collapsed": false,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 22
+    },
+    "id": 13,
+    "panels": [],
+    "title": "Percentiles & Ratio",
+    "type": "row"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "description": "avg_out_in_ratio excludes requests with in+out < 150 tokens; percentiles include all requests.",
+    "fieldConfig": {
+     "defaults": {},
+     "overrides": [
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "in_p50"
+       },
+       "properties": [
+        {
+         "id": "unit",
+         "value": "short"
+        },
+        {
+         "id": "displayName",
+         "value": "in_p50"
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "in_p90"
+       },
+       "properties": [
+        {
+         "id": "unit",
+         "value": "short"
+        },
+        {
+         "id": "displayName",
+         "value": "in_p90"
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "in_p99"
+       },
+       "properties": [
+        {
+         "id": "unit",
+         "value": "short"
+        },
+        {
+         "id": "displayName",
+         "value": "in_p99"
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "out_p50"
+       },
+       "properties": [
+        {
+         "id": "unit",
+         "value": "short"
+        },
+        {
+         "id": "displayName",
+         "value": "out_p50"
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "out_p90"
+       },
+       "properties": [
+        {
+         "id": "unit",
+         "value": "short"
+        },
+        {
+         "id": "displayName",
+         "value": "out_p90"
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "out_p99"
+       },
+       "properties": [
+        {
+         "id": "unit",
+         "value": "short"
+        },
+        {
+         "id": "displayName",
+         "value": "out_p99"
+        }
+       ]
+      }
+     ]
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 12,
+     "x": 0,
+     "y": 23
+    },
+    "id": 14,
+    "options": {
+     "cellHeight": "sm",
+     "showHeader": true
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "table",
+      "rawQuery": true,
+      "rawSql": "SELECT CASE WHEN model_group IN ('glm52', 'glm5.1-w8a8', 'glm53', 'glm5.1') THEN 'glm-text' WHEN model_group IN ('deepseek-v4-flash', 'deepseek-v4-flash0731') THEN 'deepseek-v4-flash' ELSE COALESCE(NULLIF(model_group, ''), '<none>') END AS model_group, COUNT(*) AS requests, ROUND(percentile_cont(0.5) WITHIN GROUP (ORDER BY prompt_tokens)::numeric) AS in_p50, ROUND(percentile_cont(0.9) WITHIN GROUP (ORDER BY prompt_tokens)::numeric) AS in_p90, ROUND(percentile_cont(0.99) WITHIN GROUP (ORDER BY prompt_tokens)::numeric) AS in_p99, ROUND(percentile_cont(0.5) WITHIN GROUP (ORDER BY completion_tokens)::numeric) AS out_p50, ROUND(percentile_cont(0.9) WITHIN GROUP (ORDER BY completion_tokens)::numeric) AS out_p90, ROUND(percentile_cont(0.99) WITHIN GROUP (ORDER BY completion_tokens)::numeric) AS out_p99, ROUND(AVG(completion_tokens::numeric / NULLIF(prompt_tokens, 0)) FILTER (WHERE \"prompt_tokens\" + \"completion_tokens\" >= 150), 3) AS avg_out_in_ratio FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND status = 'success' AND api_key IN (${key_group:sqlstring}) GROUP BY 1 ORDER BY requests DESC",
+      "refId": "A"
+     }
+    ],
+    "title": "N5 Token Percentiles by Model Group",
+    "type": "table"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "description": "avg completion_tokens / prompt_tokens per request. <1 = input-heavy, >1 = output-heavy. Requests with input+output < 150 tokens are excluded from averages (probe/ping traffic).",
+    "fieldConfig": {
+     "defaults": {
+      "custom": {
+       "fillOpacity": 15,
+       "lineWidth": 1,
+       "showPoints": "never"
+      },
+      "decimals": 2,
+      "unit": "locale"
+     },
+     "overrides": [
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "glm-text"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "green",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "deepseek-v4-flash"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "blue",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "glm53-flash"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "orange",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "Search Agent"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "purple",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "<none>"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "#8e8e8e",
+          "mode": "fixed"
+         }
+        }
+       ]
+      }
+     ]
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 12,
+     "x": 12,
+     "y": 23
+    },
+    "id": 15,
+    "options": {
+     "legend": {
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "tooltip": {
+      "mode": "multi",
+      "sort": "desc"
+     }
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "time_series",
+      "rawQuery": true,
+      "rawSql": "SELECT $__timeGroupAlias(\"startTime\", $__interval), CASE WHEN model_group IN ('glm52', 'glm5.1-w8a8', 'glm53', 'glm5.1') THEN 'glm-text' WHEN model_group IN ('deepseek-v4-flash', 'deepseek-v4-flash0731') THEN 'deepseek-v4-flash' ELSE COALESCE(NULLIF(model_group, ''), '<none>') END AS metric, ROUND(AVG(completion_tokens::numeric / NULLIF(prompt_tokens, 0)), 3) AS out_in_ratio FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND status = 'success' AND prompt_tokens > 0 AND api_key IN (${key_group:sqlstring}) AND (\"prompt_tokens\" + \"completion_tokens\") >= 150 GROUP BY 1, 2 ORDER BY 1, 2",
+      "refId": "A"
+     }
+    ],
+    "title": "N6 Output/Input Ratio Trend (by model group)",
+    "type": "timeseries"
+   }
+  ],
+  "refresh": "5m",
+  "schemaVersion": 39,
+  "tags": [
+   "litellm",
+   "llm",
+   "tokens"
+  ],
+  "templating": {
+   "list": [
+    {
+     "allValue": "",
+     "class": "custom",
+     "current": {
+      "selected": true,
+      "text": [
+       "All"
+      ],
+      "value": [
+       "$__all"
+      ]
+     },
+     "hide": 2,
+     "includeAll": true,
+     "label": "Key Group (in-dashboards key management)",
+     "multi": true,
+     "name": "key_group",
+     "options": [
+      {
+       "selected": true,
+       "text": "All",
+       "value": "$__all"
+      }
+     ],
+     "query": "SEARCH_AGENT_KEY,API_KEY_06,API_KEY_02,API_KEY_07,API_KEY_01,API_KEY_05,API_KEY_03,API_KEY_04",
+     "type": "custom"
+    }
+   ]
+  },
+  "time": {
+   "from": "now-7d",
+   "to": "now"
+  },
+  "timezone": "browser",
+  "title": "LiteLLM Token Analysis (by Model Group)",
+  "uid": "litellm-token-analysis",
+  "version": 21
+ },
+ "overwrite": true
+}

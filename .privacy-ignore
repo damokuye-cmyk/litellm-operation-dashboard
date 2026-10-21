@@ -1,0 +1,6 @@
+# Known-benign ASSET files. These dashboard JSONs are executable SQL definitions;
+# their `api_key`/`SEARCH_AGENT_KEY`/`API_KEY_01..07` names are Grafana variable
+# placeholders and SQL column references, NOT runtime credentials. Real-secret
+# patterns (sk-/ghp_/AKIA/emails/private keys/home paths) still apply to all
+# other files, and these files are still guarded by every other pattern.
+assets/dashboards/*.json

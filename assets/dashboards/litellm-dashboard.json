@@ -1,0 +1,1271 @@
+{
+ "dashboard": {
+  "graphTooltip": 1,
+  "id": 1,
+  "panels": [
+   {
+    "collapsed": false,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 0
+    },
+    "id": 1,
+    "panels": [],
+    "title": "Overview",
+    "type": "row"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "unit": "locale"
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 4,
+     "w": 4,
+     "x": 0,
+     "y": 1
+    },
+    "id": 2,
+    "options": {
+     "colorMode": "value",
+     "graphMode": "area",
+     "reduceOptions": {
+      "calcs": [
+       "lastNotNull"
+      ],
+      "fields": "",
+      "values": false
+     },
+     "textMode": "auto"
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "table",
+      "rawQuery": true,
+      "rawSql": "SELECT COUNT(*) AS requests FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring})",
+      "refId": "A"
+     }
+    ],
+    "title": "Total Requests",
+    "type": "stat"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "description": "success / (total - client param errors). Parameter errors (400/401/403 class: invalid model, unsupported params, key not allowed, etc.) are removed from the denominator, consistent with the Failed Requests card caliber.",
+    "fieldConfig": {
+     "defaults": {
+      "max": 100,
+      "thresholds": {
+       "mode": "absolute",
+       "steps": [
+        {
+         "color": "red",
+         "value": null
+        },
+        {
+         "color": "yellow",
+         "value": 90
+        },
+        {
+         "color": "green",
+         "value": 97
+        }
+       ]
+      },
+      "unit": "percent"
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 4,
+     "w": 4,
+     "x": 4,
+     "y": 1
+    },
+    "id": 3,
+    "options": {
+     "colorMode": "value",
+     "graphMode": "area",
+     "reduceOptions": {
+      "calcs": [
+       "lastNotNull"
+      ],
+      "fields": "",
+      "values": false
+     },
+     "textMode": "auto"
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "table",
+      "rawQuery": true,
+      "rawSql": "SELECT ROUND(100.0 * COUNT(*) FILTER (WHERE status = 'success') / NULLIF(COUNT(*) FILTER (WHERE status = 'success' OR NOT (metadata->'error_information'->>'error_class' IN ('BadRequestError','UnsupportedParamsError','AuthenticationError') OR metadata->'error_information'->>'error_code' IN ('400','401','403') OR metadata->'error_information'->>'error_message' ~* '(invalid model name|key not allowed to access model|does not support parameters|unsupported chat content part|not a multimodal model|unterminated string|cannot be greater than|at most [0-9]+ image|unexpected keyword argument|only support the value)')), 0), 2) AS success_rate FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring})",
+      "refId": "A"
+     }
+    ],
+    "title": "Success Rate (excl. client param errors)",
+    "type": "stat"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "description": "Counts failures EXCLUDING client-caused parameter errors (400/401/403 class: bad request, invalid model, unsupported params, key not allowed). Param errors remain visible in the failed-request list with a 错误类型 label.",
+    "fieldConfig": {
+     "defaults": {
+      "thresholds": {
+       "mode": "absolute",
+       "steps": [
+        {
+         "color": "green",
+         "value": null
+        },
+        {
+         "color": "red",
+         "value": 1
+        }
+       ]
+      },
+      "unit": "locale"
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 4,
+     "w": 4,
+     "x": 8,
+     "y": 1
+    },
+    "id": 4,
+    "options": {
+     "colorMode": "value",
+     "graphMode": "area",
+     "reduceOptions": {
+      "calcs": [
+       "lastNotNull"
+      ],
+      "fields": "",
+      "values": false
+     },
+     "textMode": "auto"
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "table",
+      "rawQuery": true,
+      "rawSql": "SELECT COUNT(*) FILTER (WHERE status = 'failure' AND NOT (metadata->'error_information'->>'error_class' IN ('BadRequestError','UnsupportedParamsError','AuthenticationError') OR metadata->'error_information'->>'error_code' IN ('400','401','403') OR metadata->'error_information'->>'error_message' ~* '(invalid model name|key not allowed to access model|does not support parameters|unsupported chat content part|not a multimodal model|unterminated string|cannot be greater than|at most [0-9]+ image)')) AS failed FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring})",
+      "refId": "A"
+     }
+    ],
+    "title": "Failed Requests (excl. client param errors)",
+    "type": "stat"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "unit": "short"
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 4,
+     "w": 4,
+     "x": 12,
+     "y": 1
+    },
+    "id": 5,
+    "options": {
+     "colorMode": "value",
+     "graphMode": "area",
+     "reduceOptions": {
+      "calcs": [
+       "lastNotNull"
+      ],
+      "fields": "",
+      "values": false
+     },
+     "textMode": "auto"
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "table",
+      "rawQuery": true,
+      "rawSql": "SELECT ROUND(SUM(total_tokens)) AS total_tokens FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring})",
+      "refId": "A"
+     }
+    ],
+    "title": "Total Tokens",
+    "type": "stat"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "decimals": 2,
+      "unit": "currencyUSD"
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 4,
+     "w": 4,
+     "x": 16,
+     "y": 1
+    },
+    "id": 6,
+    "options": {
+     "colorMode": "value",
+     "graphMode": "none",
+     "reduceOptions": {
+      "calcs": [
+       "lastNotNull"
+      ],
+      "fields": "",
+      "values": false
+     },
+     "textMode": "auto"
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "table",
+      "rawQuery": true,
+      "rawSql": "SELECT COALESCE(ROUND(SUM(spend)::numeric, 2), 0) AS spend FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring})",
+      "refId": "A"
+     }
+    ],
+    "title": "Total Spend (USD)",
+    "type": "stat"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "description": "Same metric as the E2E chart: request_duration_ms = endTime - startTime (equal within 1ms).",
+    "fieldConfig": {
+     "defaults": {
+      "unit": "ms"
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 4,
+     "w": 4,
+     "x": 20,
+     "y": 1
+    },
+    "id": 7,
+    "options": {
+     "colorMode": "value",
+     "graphMode": "area",
+     "reduceOptions": {
+      "calcs": [
+       "lastNotNull"
+      ],
+      "fields": "",
+      "values": false
+     },
+     "textMode": "auto"
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "table",
+      "rawQuery": true,
+      "rawSql": "SELECT ROUND(AVG(request_duration_ms)::numeric, 0) AS avg_ms FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring})",
+      "refId": "A"
+     }
+    ],
+    "title": "Avg E2E Latency (ms)",
+    "type": "stat"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "custom": {
+       "drawStyle": "line",
+       "fillOpacity": 25,
+       "lineInterpolation": "smooth",
+       "lineWidth": 1,
+       "pointSize": 5,
+       "showPoints": "never",
+       "spanNulls": true,
+       "stacking": {
+        "group": "A",
+        "mode": "normal"
+       }
+      },
+      "unit": "locale"
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 12,
+     "x": 0,
+     "y": 7
+    },
+    "id": 8,
+    "options": {
+     "legend": {
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "tooltip": {
+      "mode": "multi",
+      "sort": "desc"
+     }
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "time_series",
+      "rawQuery": true,
+      "rawSql": "SELECT $__timeGroupAlias(\"startTime\", $__interval), COUNT(*) FILTER (WHERE status = 'success') AS success, COUNT(*) FILTER (WHERE status = 'failure') AS failed FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring}) GROUP BY 1 ORDER BY 1",
+      "refId": "A"
+     }
+    ],
+    "title": "N1 Requests Trend (by model, startTime)",
+    "type": "timeseries"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "custom": {
+       "drawStyle": "line",
+       "fillOpacity": 25,
+       "lineInterpolation": "smooth",
+       "lineWidth": 1,
+       "pointSize": 5,
+       "showPoints": "never",
+       "spanNulls": true,
+       "stacking": {
+        "group": "A",
+        "mode": "normal"
+       }
+      },
+      "unit": "short"
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 12,
+     "x": 12,
+     "y": 7
+    },
+    "id": 9,
+    "options": {
+     "legend": {
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "tooltip": {
+      "mode": "multi",
+      "sort": "desc"
+     }
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "time_series",
+      "rawQuery": true,
+      "rawSql": "SELECT $__timeGroupAlias(\"startTime\", $__interval), SUM(prompt_tokens) AS prompt_tokens, SUM(completion_tokens) AS completion_tokens FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring}) GROUP BY 1 ORDER BY 1",
+      "refId": "A"
+     }
+    ],
+    "title": "N2 Tokens Trend (in+out)",
+    "type": "timeseries"
+   },
+   {
+    "collapsed": false,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 15
+    },
+    "id": 10,
+    "panels": [],
+    "title": "Models",
+    "type": "row"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "custom": {
+       "drawStyle": "line",
+       "fillOpacity": 40,
+       "lineInterpolation": "smooth",
+       "lineWidth": 1,
+       "pointSize": 5,
+       "showPoints": "never",
+       "spanNulls": true,
+       "stacking": {
+        "group": "A",
+        "mode": "normal"
+       }
+      },
+      "unit": "short"
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 12,
+     "x": 0,
+     "y": 16
+    },
+    "id": 11,
+    "options": {
+     "legend": {
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "tooltip": {
+      "mode": "multi",
+      "sort": "desc"
+     }
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "time_series",
+      "rawQuery": true,
+      "rawSql": "SELECT $__timeGroupAlias(\"startTime\", $__interval), model AS metric, ROUND(SUM(total_tokens)) AS tokens FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring}) AND model IN (SELECT model FROM \"LiteLLM_SpendLogs\" WHERE model <> '' GROUP BY model ORDER BY ROUND(SUM(total_tokens)) DESC LIMIT 10) GROUP BY 1, 2 ORDER BY 1, 2",
+      "refId": "A"
+     }
+    ],
+    "title": "N5 Tokens by Model — top 10",
+    "type": "timeseries"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "fieldConfig": {
+     "defaults": {},
+     "overrides": [
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "completion_tokens"
+       },
+       "properties": [
+        {
+         "id": "unit",
+         "value": "short"
+        },
+        {
+         "id": "displayName",
+         "value": "completion_tokens"
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "prompt_tokens"
+       },
+       "properties": [
+        {
+         "id": "unit",
+         "value": "short"
+        },
+        {
+         "id": "displayName",
+         "value": "prompt_tokens"
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "total_tokens"
+       },
+       "properties": [
+        {
+         "id": "unit",
+         "value": "short"
+        },
+        {
+         "id": "displayName",
+         "value": "total_tokens"
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "request_count"
+       },
+       "properties": [
+        {
+         "id": "unit",
+         "value": "locale"
+        }
+       ]
+      }
+     ]
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 12,
+     "x": 12,
+     "y": 16
+    },
+    "id": 12,
+    "options": {
+     "cellHeight": "sm",
+     "showHeader": true
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "table",
+      "rawQuery": true,
+      "rawSql": "SELECT model, COUNT(*) AS requests, ROUND(SUM(prompt_tokens)) AS prompt_tokens, SUM(completion_tokens) AS completion_tokens, ROUND(SUM(total_tokens)) AS total_tokens, ROUND(AVG(request_duration_ms)::numeric, 0) AS avg_ms, ROUND(percentile_cont(0.95) WITHIN GROUP (ORDER BY request_duration_ms)::numeric, 0) AS p95_ms, COUNT(*) FILTER (WHERE status = 'failure') AS failures FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring}) GROUP BY model ORDER BY requests DESC",
+      "refId": "A"
+     }
+    ],
+    "title": "N6 Model Breakdown Sheet",
+    "type": "table"
+   },
+   {
+    "collapsed": false,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 24
+    },
+    "id": 13,
+    "panels": [],
+    "title": "Latency & Users",
+    "type": "row"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "custom": {
+       "drawStyle": "line",
+       "fillOpacity": 15,
+       "lineInterpolation": "smooth",
+       "lineWidth": 1,
+       "pointSize": 5,
+       "showPoints": "never",
+       "spanNulls": true
+      },
+      "unit": "ms"
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 12,
+     "x": 0,
+     "y": 25
+    },
+    "id": 14,
+    "options": {
+     "legend": {
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "tooltip": {
+      "mode": "multi",
+      "sort": "desc"
+     }
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "time_series",
+      "rawQuery": true,
+      "rawSql": "SELECT $__timeGroupAlias(\"startTime\", $__interval), ROUND(AVG(request_duration_ms)::numeric, 0) AS avg_ms, ROUND(percentile_cont(0.95) WITHIN GROUP (ORDER BY request_duration_ms)::numeric, 0) AS p95_ms FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring}) GROUP BY 1 ORDER BY 1",
+      "refId": "A"
+     }
+    ],
+    "title": "N7 Latency Trend (avg/p95, all requests)",
+    "type": "timeseries"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "fieldConfig": {
+     "defaults": {},
+     "overrides": [
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "total_tokens"
+       },
+       "properties": [
+        {
+         "id": "unit",
+         "value": "short"
+        },
+        {
+         "id": "displayName",
+         "value": "total_tokens"
+        }
+       ]
+      }
+     ]
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 12,
+     "x": 12,
+     "y": 25
+    },
+    "id": 15,
+    "options": {
+     "cellHeight": "sm",
+     "showHeader": true
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "table",
+      "rawQuery": true,
+      "rawSql": "SELECT COALESCE(NULLIF(\"user\", ''), '<empty>') AS user_id, COUNT(*) AS requests, ROUND(SUM(total_tokens)) AS total_tokens, COUNT(*) FILTER (WHERE status = 'failure') AS failures FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring}) GROUP BY 1 ORDER BY requests DESC LIMIT 20",
+      "refId": "A"
+     }
+    ],
+    "title": "N8 Top Users",
+    "type": "table"
+   },
+   {
+    "collapsed": false,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 33
+    },
+    "id": 16,
+    "panels": [],
+    "title": "Errors",
+    "type": "row"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "color": {
+       "fixedColor": "red",
+       "mode": "fixed"
+      },
+      "custom": {
+       "drawStyle": "line",
+       "fillOpacity": 40,
+       "lineInterpolation": "smooth",
+       "lineWidth": 1,
+       "pointSize": 5,
+       "showPoints": "never",
+       "spanNulls": true
+      },
+      "unit": "locale"
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 24,
+     "x": 0,
+     "y": 34
+    },
+    "id": 17,
+    "options": {
+     "legend": {
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "tooltip": {
+      "mode": "multi",
+      "sort": "desc"
+     }
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "time_series",
+      "rawQuery": true,
+      "rawSql": "SELECT $__timeGroupAlias(\"startTime\", $__interval), COUNT(*) FILTER (WHERE status = 'failure' AND NOT (metadata->'error_information'->>'error_class' IN ('BadRequestError','UnsupportedParamsError','AuthenticationError') OR metadata->'error_information'->>'error_code' IN ('400','401','403') OR metadata->'error_information'->>'error_message' ~* '(invalid model name|key not allowed to access model|does not support parameters|unsupported chat content part|not a multimodal model|unterminated string|cannot be greater than|at most [0-9]+ image)')) AS failed FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring}) GROUP BY 1 ORDER BY 1",
+      "refId": "A"
+     }
+    ],
+    "title": "N9 Failures Trend",
+    "type": "timeseries"
+   },
+   {
+    "collapsed": false,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 43
+    },
+    "id": 19,
+    "panels": [],
+    "title": "Streaming Metrics",
+    "type": "row"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "custom": {
+       "drawStyle": "line",
+       "fillOpacity": 15,
+       "lineInterpolation": "smooth",
+       "lineWidth": 1,
+       "pointSize": 5,
+       "showPoints": "never",
+       "spanNulls": true
+      },
+      "unit": "ms"
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 8,
+     "x": 0,
+     "y": 44
+    },
+    "id": 20,
+    "options": {
+     "legend": {
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "tooltip": {
+      "mode": "multi",
+      "sort": "desc"
+     }
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "time_series",
+      "rawQuery": true,
+      "rawSql": "SELECT $__timeGroupAlias(\"startTime\", $__interval), model AS metric, ROUND(AVG(EXTRACT(EPOCH FROM (\"completionStartTime\" - \"startTime\")) * 1000)::numeric, 0) AS ttft_ms FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring}) AND status = 'success' AND proxy_server_request->>'stream' = 'true' AND \"completionStartTime\" > \"startTime\" GROUP BY 1, 2 ORDER BY 1, 2",
+      "refId": "A"
+     }
+    ],
+    "title": "N11 TTFT (avg ms, stream only)",
+    "type": "timeseries"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "description": "E2E = endTime - startTime = request_duration_ms (verified equal within 1ms rounding). Same metric as 'Avg latency'; shown here scoped to streaming requests.",
+    "fieldConfig": {
+     "defaults": {
+      "custom": {
+       "drawStyle": "line",
+       "fillOpacity": 15,
+       "lineInterpolation": "smooth",
+       "lineWidth": 1,
+       "pointSize": 5,
+       "showPoints": "never",
+       "spanNulls": true
+      },
+      "unit": "ms"
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 8,
+     "x": 8,
+     "y": 44
+    },
+    "id": 21,
+    "options": {
+     "legend": {
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "tooltip": {
+      "mode": "multi",
+      "sort": "desc"
+     }
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "time_series",
+      "rawQuery": true,
+      "rawSql": "SELECT $__timeGroupAlias(\"startTime\", $__interval), model AS metric, ROUND(AVG(EXTRACT(EPOCH FROM (\"endTime\" - \"startTime\")) * 1000)::numeric, 0) AS e2e_ms FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring}) AND status = 'success' AND proxy_server_request->>'stream' = 'true' AND \"completionStartTime\" > \"startTime\" GROUP BY 1, 2 ORDER BY 1, 2",
+      "refId": "A"
+     }
+    ],
+    "title": "N12 E2E Latency (avg ms, stream only)",
+    "type": "timeseries"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "custom": {
+       "drawStyle": "line",
+       "fillOpacity": 15,
+       "lineInterpolation": "smooth",
+       "lineWidth": 1,
+       "pointSize": 5,
+       "showPoints": "never",
+       "spanNulls": true
+      },
+      "unit": "ms"
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 8,
+     "x": 16,
+     "y": 44
+    },
+    "id": 22,
+    "options": {
+     "legend": {
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "tooltip": {
+      "mode": "multi",
+      "sort": "desc"
+     }
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "time_series",
+      "rawQuery": true,
+      "rawSql": "SELECT $__timeGroupAlias(\"startTime\", $__interval), model AS metric, ROUND(AVG(EXTRACT(EPOCH FROM (\"endTime\" - \"completionStartTime\")) * 1000 / NULLIF(completion_tokens, 0))::numeric, 1) AS tpot_ms FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring}) AND status = 'success' AND \"completionStartTime\" > \"startTime\" AND proxy_server_request->>'stream' = 'true' AND EXTRACT(EPOCH FROM (\"endTime\" - \"completionStartTime\")) >= 1 AND completion_tokens > 0 GROUP BY 1, 2 ORDER BY 1, 2",
+      "refId": "A"
+     }
+    ],
+    "title": "N13 TPOT (ms/output tok, stream only)",
+    "type": "timeseries"
+   },
+   {
+    "collapsed": false,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 52
+    },
+    "id": 23,
+    "panels": [],
+    "title": "Request Tags Matrix",
+    "type": "row"
+   },
+   {
+    "datasource": {
+     "type": "postgres",
+     "uid": "P98809E0A67B9D897"
+    },
+    "description": "Rows = client extracted from request_tags (User-Agent), columns = models, cells = request count.",
+    "fieldConfig": {
+     "defaults": {},
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 10,
+     "w": 24,
+     "x": 0,
+     "y": 53
+    },
+    "id": 24,
+    "options": {
+     "cellHeight": "sm",
+     "showHeader": true
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "editorMode": "code",
+      "format": "table",
+      "rawQuery": true,
+      "rawSql": "SELECT COALESCE(split_part(request_tags->>0, ': ', 2), '<none>') AS client, COUNT(*) FILTER (WHERE model = 'openai/glm53') AS \"glm53\", COUNT(*) FILTER (WHERE model = 'openai/deepseek-v4-flash0731') AS \"deepseek-v4-flash0731\", COUNT(*) FILTER (WHERE model = 'openai/glm53-flash') AS \"glm53-flash\", COUNT(*) FILTER (WHERE model = 'openai/internal-agent') AS \"internal-agent\", COUNT(*) FILTER (WHERE model NOT IN ('openai/glm53', 'openai/deepseek-v4-flash0731', 'openai/glm53-flash', 'openai/internal-agent')) AS \"other\", COUNT(*) AS total FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring}) GROUP BY 1 ORDER BY total DESC LIMIT 20",
+      "refId": "A"
+     }
+    ],
+    "title": "N14 Client × Model Matrix",
+    "type": "table"
+   },
+   {
+    "collapsed": true,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 42
+    },
+    "id": 25,
+    "panels": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "description": "错误类型 = 参数错误（调用方原因：400/401/403、非法模型名、不支持的参数等） / 其他（服务自身或无法定责）。分类规则由每晚 23:00 的分析任务维护（error-type-rules.json）。",
+      "fieldConfig": {
+       "defaults": {},
+       "overrides": []
+      },
+      "gridPos": {
+       "h": 8,
+       "w": 24,
+       "x": 0,
+       "y": 41
+      },
+      "id": 18,
+      "options": {
+       "cellHeight": "sm",
+       "showHeader": true
+      },
+      "targets": [
+       {
+        "datasource": {
+         "type": "postgres",
+         "uid": "P98809E0A67B9D897"
+        },
+        "editorMode": "code",
+        "format": "table",
+        "rawQuery": true,
+        "rawSql": "SELECT \"startTime\" AS time, model, COALESCE(NULLIF(\"user\", ''), '<empty>') AS user_id, CASE WHEN (metadata->'error_information'->>'error_class' IN ('BadRequestError','UnsupportedParamsError','AuthenticationError') OR metadata->'error_information'->>'error_code' IN ('400','401','403') OR metadata->'error_information'->>'error_message' ~* '(invalid model name|key not allowed to access model|does not support parameters|unsupported chat content part|not a multimodal model|unterminated string|cannot be greater than|at most [0-9]+ image)') THEN '参数错误' ELSE '其他' END AS error_type, request_id FROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring}) AND status = 'failure' ORDER BY \"startTime\" DESC LIMIT 100",
+        "refId": "A"
+       }
+      ],
+      "title": "Recent failures",
+      "type": "table"
+     }
+    ],
+    "title": "Recent Failures (click to load)",
+    "type": "row"
+   },
+   {
+    "collapsed": true,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 5
+    },
+    "id": 28,
+    "panels": [
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "description": "Sum of prompt_tokens per time bucket, divided by 1000 and shown in K. Scope: selected time range + key group. Collapsed by default; click the row to load.",
+      "fieldConfig": {
+       "defaults": {
+        "custom": {
+         "drawStyle": "bars",
+         "fillOpacity": 25,
+         "lineWidth": 1,
+         "showPoints": "never",
+         "spanNulls": true,
+         "stacking": {
+          "group": "A",
+          "mode": "normal"
+         }
+        },
+        "unit": "short"
+       },
+       "overrides": []
+      },
+      "gridPos": {
+       "h": 8,
+       "w": 12,
+       "x": 0,
+       "y": 6
+      },
+      "id": 26,
+      "options": {
+       "legend": {
+        "displayMode": "list",
+        "placement": "bottom",
+        "showLegend": true
+       },
+       "tooltip": {
+        "mode": "multi",
+        "sort": "desc"
+       }
+      },
+      "targets": [
+       {
+        "datasource": {
+         "type": "postgres",
+         "uid": "P98809E0A67B9D897"
+        },
+        "editorMode": "code",
+        "format": "time_series",
+        "rawQuery": true,
+        "rawSql": "SELECT $__timeGroupAlias(\"startTime\", $__interval), ROUND(SUM(prompt_tokens)) AS input_tokens\nFROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring}) \nGROUP BY 1 ORDER BY 1",
+        "refId": "A"
+       }
+      ],
+      "title": "N3 Input Tokens Trend",
+      "type": "timeseries"
+     },
+     {
+      "datasource": {
+       "type": "postgres",
+       "uid": "P98809E0A67B9D897"
+      },
+      "description": "Sum of completion_tokens per time bucket, RAW values (not divided). Scope: selected time range + key group. Collapsed by default; click the row to load.",
+      "fieldConfig": {
+       "defaults": {
+        "custom": {
+         "drawStyle": "bars",
+         "fillOpacity": 25,
+         "lineWidth": 1,
+         "showPoints": "never",
+         "spanNulls": true,
+         "stacking": {
+          "group": "A",
+          "mode": "normal"
+         }
+        },
+        "unit": "short"
+       },
+       "overrides": []
+      },
+      "gridPos": {
+       "h": 8,
+       "w": 12,
+       "x": 12,
+       "y": 6
+      },
+      "id": 27,
+      "options": {
+       "legend": {
+        "displayMode": "list",
+        "placement": "bottom",
+        "showLegend": true
+       },
+       "tooltip": {
+        "mode": "multi",
+        "sort": "desc"
+       }
+      },
+      "targets": [
+       {
+        "datasource": {
+         "type": "postgres",
+         "uid": "P98809E0A67B9D897"
+        },
+        "editorMode": "code",
+        "format": "time_series",
+        "rawQuery": true,
+        "rawSql": "SELECT $__timeGroupAlias(\"startTime\", $__interval), SUM(completion_tokens) AS output_tokens\nFROM \"LiteLLM_SpendLogs\" WHERE $__timeFilter(\"startTime\") AND api_key IN (${key_group:sqlstring}) \nGROUP BY 1 ORDER BY 1",
+        "refId": "A"
+       }
+      ],
+      "title": "N4 Output Tokens Trend",
+      "type": "timeseries"
+     }
+    ],
+    "title": "N3/N4 Input/Output Token Trends (click to expand)",
+    "type": "row"
+   },
+   {
+    "collapsed": false,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 6
+    },
+    "id": 29,
+    "panels": [],
+    "title": "Core Trends (N1/N2)",
+    "type": "row"
+   }
+  ],
+  "refresh": "5m",
+  "schemaVersion": 39,
+  "tags": [
+   "litellm",
+   "llm"
+  ],
+  "templating": {
+   "list": [
+    {
+     "allValue": "",
+     "class": "custom",
+     "current": {
+      "selected": true,
+      "text": [
+       "All"
+      ],
+      "value": [
+       "$__all"
+      ]
+     },
+     "hide": 2,
+     "includeAll": true,
+     "label": "Key Group (in-dashboards key management)",
+     "multi": true,
+     "name": "key_group",
+     "options": [
+      {
+       "selected": true,
+       "text": "All",
+       "value": "$__all"
+      }
+     ],
+     "query": "SEARCH_AGENT_KEY,API_KEY_06,API_KEY_02,API_KEY_07,API_KEY_01,API_KEY_05,API_KEY_03,API_KEY_04",
+     "type": "custom"
+    }
+   ]
+  },
+  "time": {
+   "from": "now-7d",
+   "to": "now"
+  },
+  "timezone": "browser",
+  "title": "LiteLLM SpendLogs",
+  "uid": "litellm-spendlogs",
+  "version": 32
+ },
+ "overwrite": true
+}
