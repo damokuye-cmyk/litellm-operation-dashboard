@@ -38,7 +38,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "fieldConfig": {
      "defaults": {
@@ -89,7 +89,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "table",
@@ -104,7 +104,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "description": "success / (total - client param errors). Parameter errors (400/401/403 class: invalid model, unsupported params, key not allowed, etc.) are removed from the denominator, consistent with the Failed Requests card caliber.",
     "fieldConfig": {
@@ -162,7 +162,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "table",
@@ -177,7 +177,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "description": "Counts failures EXCLUDING client-caused parameter errors (400/401/403 class: bad request, invalid model, unsupported params, key not allowed). Param errors remain visible in the failed-request list with a 错误类型 label.",
     "fieldConfig": {
@@ -229,7 +229,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "table",
@@ -244,7 +244,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "fieldConfig": {
      "defaults": {
@@ -295,7 +295,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "table",
@@ -310,7 +310,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "description": "Same metric as the E2E chart: request_duration_ms = endTime - startTime (equal within 1ms).",
     "fieldConfig": {
@@ -362,7 +362,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "table",
@@ -377,7 +377,7 @@
    {
     "datasource": {
      "type": "grafana-postgresql-datasource",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "description": "Total glm53-flash requests containing at least one image_url part in proxy_server_request.messages. Scope: selected time range + key group.",
     "fieldConfig": {
@@ -429,7 +429,7 @@
      {
       "datasource": {
        "type": "grafana-postgresql-datasource",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "table",
@@ -454,7 +454,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "description": "Sum of prompt_tokens per time bucket, divided by 1000 and shown in K. Scope: selected time range + key group. Collapsed by default; click the row to load.",
       "fieldConfig": {
@@ -575,7 +575,7 @@
        {
         "datasource": {
          "type": "postgres",
-         "uid": "P98809E0A67B9D897"
+         "uid": "GKFSMBOCFSBSO"
         },
         "editorMode": "code",
         "format": "time_series",
@@ -590,7 +590,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "description": "Sum of completion_tokens per time bucket, RAW values (not divided). Scope: selected time range + key group. Collapsed by default; click the row to load.",
       "fieldConfig": {
@@ -711,7 +711,7 @@
        {
         "datasource": {
          "type": "postgres",
-         "uid": "P98809E0A67B9D897"
+         "uid": "GKFSMBOCFSBSO"
         },
         "editorMode": "code",
         "format": "time_series",
@@ -730,7 +730,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "description": "Ctrl+click a legend label to remove just that series (click again to restore). Plain click isolates it instead.",
     "fieldConfig": {
@@ -888,7 +888,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "time_series",
@@ -903,7 +903,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "description": "Ctrl+click a legend label to remove just that series (click again to restore). Plain click isolates it instead.",
     "fieldConfig": {
@@ -1061,7 +1061,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "time_series",
@@ -1076,7 +1076,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "description": "Peak simultaneous in-flight requests per group per $bucket (sweep-line over [startTime, endTime): +1 at start, -1 at end, running sum; a gap shows the max in-flight count reached inside it, including requests still running from before the gap). 2 glm-text requests executing at the same instant = 2.",
     "fieldConfig": {
@@ -1234,7 +1234,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "time_series",
@@ -1249,7 +1249,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "description": "Ctrl+click a legend label to remove just that series (click again to restore). Plain click isolates it instead. | glm53-flash (n+s): non-stream + stream combined. Stream rows use real generation window (endTime - completionStartTime). Non-stream rows are APPROXIMATED with a fixed TTFT of 1 s: generation = E2E - 1 s, TPOT = (E2E - 1 s) / completion_tokens. All other series remain streaming-only.",
     "fieldConfig": {
@@ -1422,7 +1422,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "time_series",
@@ -1433,7 +1433,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "time_series",
@@ -1448,7 +1448,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "description": "Non-stream (buffered) requests only: gen window < 1s. Time-to-first-token divided by input tokens = prompt processing throughput (ms per input token). Lower = faster.",
     "fieldConfig": {
@@ -1606,7 +1606,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "time_series",
@@ -1621,7 +1621,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "description": "Ctrl+click a legend label to remove just that series (click again to restore). Plain click isolates it instead.",
     "fieldConfig": {
@@ -1779,7 +1779,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "time_series",
@@ -1794,7 +1794,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "description": "Ctrl+click a legend label to remove just that series (click again to restore). Plain click isolates it instead.",
     "fieldConfig": {
@@ -1952,7 +1952,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "time_series",
@@ -1967,7 +1967,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "description": "E2E = endTime - startTime = request_duration_ms (verified equal within 1ms rounding). Same metric as 'Avg latency'; shown here scoped to streaming requests.",
     "fieldConfig": {
@@ -2125,7 +2125,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "time_series",
@@ -2153,7 +2153,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "description": "avg_input/avg_output exclude requests with input+output < 150 tokens; request counts, totals and maxes include ALL requests in scope.",
     "fieldConfig": {
@@ -2379,7 +2379,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "table",
@@ -2404,7 +2404,7 @@
      {
       "datasource": {
        "type": "grafana-postgresql-datasource",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "description": "All glm53-flash requests containing image_url parts in the request. image_count = number of image parts parsed from messages. Image-specific token counts are not reported upstream (prompt_tokens_details.image_tokens is null), so input/output tokens are the request totals.",
       "fieldConfig": {
@@ -2433,7 +2433,7 @@
        {
         "datasource": {
          "type": "grafana-postgresql-datasource",
-         "uid": "P98809E0A67B9D897"
+         "uid": "GKFSMBOCFSBSO"
         },
         "editorMode": "code",
         "format": "table",
@@ -2448,7 +2448,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "description": "错误类型 = 参数错误（调用方原因：400/401/403、非法模型名、不支持的参数等） / 其他（服务自身或无法定责）。分类规则由每晚 23:00 的分析任务维护（error-type-rules.json）。",
       "fieldConfig": {
@@ -2470,7 +2470,7 @@
        {
         "datasource": {
          "type": "postgres",
-         "uid": "P98809E0A67B9D897"
+         "uid": "GKFSMBOCFSBSO"
         },
         "editorMode": "code",
         "format": "table",
@@ -2489,7 +2489,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "fieldConfig": {
      "defaults": {
@@ -2558,7 +2558,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "table",
@@ -2586,7 +2586,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "description": "Rows = client extracted from request_tags (User-Agent), columns = merged model groups, cells = request count.",
     "fieldConfig": {
@@ -2639,7 +2639,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "table",
@@ -2654,7 +2654,7 @@
    {
     "datasource": {
      "type": "grafana-postgresql-datasource",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "description": "Hour of day in Asia/Riyadh local time (startTime is stored UTC; converted +3h). Buckets are hour-of-day across the whole selected time range.",
     "fieldConfig": {
@@ -2810,7 +2810,7 @@
      {
       "datasource": {
        "type": "grafana-postgresql-datasource",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "table",
@@ -2825,7 +2825,7 @@
    {
     "datasource": {
      "type": "grafana-postgresql-datasource",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "description": "Hour of day in Asia/Riyadh local time (startTime is stored UTC; converted +3h). Buckets are hour-of-day across the whole selected time range.",
     "fieldConfig": {
@@ -2981,7 +2981,7 @@
      {
       "datasource": {
        "type": "grafana-postgresql-datasource",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "table",
@@ -2996,7 +2996,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "description": "Same scope and grouping as the top token chart; values in millions (M). Requests with empty model_group are excluded (no <none> series).",
     "fieldConfig": {
@@ -3102,7 +3102,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "time_series",
@@ -3117,7 +3117,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "description": "Request trend bucketed by request COMPLETION time (endTime), unlike the leading chart which buckets by startTime. Same merged model groups, $bucket, key-group scope and stacked-bar style as the leading requests chart. Requests without endTime are excluded.",
     "fieldConfig": {
@@ -3238,7 +3238,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "time_series",

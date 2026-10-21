@@ -6,7 +6,7 @@
 #   GRAFANA_USER    default admin
 #   GRAFANA_PASS    required - Grafana admin password
 #   DATASOURCE_UID  optional - rewrite the baked-in postgres datasource uid
-#                   (P98809E0A67B9D897) to this value before importing.
+#                   (GKFSMBOCFSBSO) to this value before importing.
 #
 # Exits non-zero if any dashboard fails to import.
 set -euo pipefail
@@ -15,7 +15,7 @@ GRAFANA_URL="${GRAFANA_URL:-http://127.0.0.1:3000}"
 GRAFANA_USER="${GRAFANA_USER:-admin}"
 GRAFANA_PASS="${GRAFANA_PASS:?Set GRAFANA_PASS to the Grafana admin password}"
 DATASOURCE_UID="${DATASOURCE_UID:-}"
-BUILTIN_UID="P98809E0A67B9D897"
+BUILTIN_UID="GKFSMBOCFSBSO"
 DIR="$(cd "$(dirname "$0")/../assets/dashboards" && pwd)"
 
 tmp="$(mktemp)"

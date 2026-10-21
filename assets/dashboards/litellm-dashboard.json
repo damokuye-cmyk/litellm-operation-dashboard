@@ -19,7 +19,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "fieldConfig": {
      "defaults": {
@@ -50,7 +50,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "table",
@@ -65,7 +65,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "description": "success / (total - client param errors). Parameter errors (400/401/403 class: invalid model, unsupported params, key not allowed, etc.) are removed from the denominator, consistent with the Failed Requests card caliber.",
     "fieldConfig": {
@@ -115,7 +115,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "table",
@@ -130,7 +130,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "description": "Counts failures EXCLUDING client-caused parameter errors (400/401/403 class: bad request, invalid model, unsupported params, key not allowed). Param errors remain visible in the failed-request list with a 错误类型 label.",
     "fieldConfig": {
@@ -175,7 +175,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "table",
@@ -190,7 +190,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "fieldConfig": {
      "defaults": {
@@ -221,7 +221,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "table",
@@ -236,7 +236,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "fieldConfig": {
      "defaults": {
@@ -268,7 +268,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "table",
@@ -283,7 +283,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "description": "Same metric as the E2E chart: request_duration_ms = endTime - startTime (equal within 1ms).",
     "fieldConfig": {
@@ -315,7 +315,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "table",
@@ -330,7 +330,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "fieldConfig": {
      "defaults": {
@@ -373,7 +373,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "time_series",
@@ -388,7 +388,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "fieldConfig": {
      "defaults": {
@@ -431,7 +431,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "time_series",
@@ -459,7 +459,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "fieldConfig": {
      "defaults": {
@@ -502,7 +502,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "time_series",
@@ -517,7 +517,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "fieldConfig": {
      "defaults": {},
@@ -599,7 +599,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "table",
@@ -627,7 +627,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "fieldConfig": {
      "defaults": {
@@ -666,7 +666,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "time_series",
@@ -681,7 +681,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "fieldConfig": {
      "defaults": {},
@@ -719,7 +719,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "table",
@@ -747,7 +747,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "fieldConfig": {
      "defaults": {
@@ -790,7 +790,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "time_series",
@@ -818,7 +818,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "fieldConfig": {
      "defaults": {
@@ -857,7 +857,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "time_series",
@@ -872,7 +872,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "description": "E2E = endTime - startTime = request_duration_ms (verified equal within 1ms rounding). Same metric as 'Avg latency'; shown here scoped to streaming requests.",
     "fieldConfig": {
@@ -912,7 +912,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "time_series",
@@ -927,7 +927,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "fieldConfig": {
      "defaults": {
@@ -966,7 +966,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "time_series",
@@ -994,7 +994,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "description": "Rows = client extracted from request_tags (User-Agent), columns = models, cells = request count.",
     "fieldConfig": {
@@ -1016,7 +1016,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "table",
@@ -1041,7 +1041,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "description": "错误类型 = 参数错误（调用方原因：400/401/403、非法模型名、不支持的参数等） / 其他（服务自身或无法定责）。分类规则由每晚 23:00 的分析任务维护（error-type-rules.json）。",
       "fieldConfig": {
@@ -1063,7 +1063,7 @@
        {
         "datasource": {
          "type": "postgres",
-         "uid": "P98809E0A67B9D897"
+         "uid": "GKFSMBOCFSBSO"
         },
         "editorMode": "code",
         "format": "table",
@@ -1092,7 +1092,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "description": "Sum of prompt_tokens per time bucket, divided by 1000 and shown in K. Scope: selected time range + key group. Collapsed by default; click the row to load.",
       "fieldConfig": {
@@ -1134,7 +1134,7 @@
        {
         "datasource": {
          "type": "postgres",
-         "uid": "P98809E0A67B9D897"
+         "uid": "GKFSMBOCFSBSO"
         },
         "editorMode": "code",
         "format": "time_series",
@@ -1149,7 +1149,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "description": "Sum of completion_tokens per time bucket, RAW values (not divided). Scope: selected time range + key group. Collapsed by default; click the row to load.",
       "fieldConfig": {
@@ -1191,7 +1191,7 @@
        {
         "datasource": {
          "type": "postgres",
-         "uid": "P98809E0A67B9D897"
+         "uid": "GKFSMBOCFSBSO"
         },
         "editorMode": "code",
         "format": "time_series",

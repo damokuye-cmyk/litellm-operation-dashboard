@@ -19,7 +19,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "description": "Requests with input+output < 150 tokens are excluded from averages (probe/ping traffic).",
     "fieldConfig": {
@@ -51,7 +51,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "table",
@@ -66,7 +66,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "fieldConfig": {
      "defaults": {
@@ -97,7 +97,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "table",
@@ -112,7 +112,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "description": "Requests with input+output < 150 tokens are excluded from averages (probe/ping traffic).",
     "fieldConfig": {
@@ -144,7 +144,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "table",
@@ -159,7 +159,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "fieldConfig": {
      "defaults": {
@@ -190,7 +190,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "table",
@@ -205,7 +205,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "description": "completion_tokens / prompt_tokens. <1 = input-heavy (RAG/summarize), >1 = output-heavy (generation). Requests with input+output < 150 tokens are excluded from averages (probe/ping traffic).",
     "fieldConfig": {
@@ -238,7 +238,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "table",
@@ -253,7 +253,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "fieldConfig": {
      "defaults": {
@@ -284,7 +284,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "table",
@@ -299,7 +299,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "description": "Requests with input+output < 150 tokens are excluded from averages (probe/ping traffic).",
     "fieldConfig": {
@@ -411,7 +411,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "time_series",
@@ -426,7 +426,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "description": "Requests with input+output < 150 tokens are excluded from averages (probe/ping traffic).",
     "fieldConfig": {
@@ -538,7 +538,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "time_series",
@@ -566,7 +566,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "fieldConfig": {
      "defaults": {
@@ -605,7 +605,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "table",
@@ -620,7 +620,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "fieldConfig": {
      "defaults": {
@@ -659,7 +659,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "table",
@@ -687,7 +687,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "description": "avg_out_in_ratio excludes requests with in+out < 150 tokens; percentiles include all requests.",
     "fieldConfig": {
@@ -806,7 +806,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "table",
@@ -821,7 +821,7 @@
    {
     "datasource": {
      "type": "postgres",
-     "uid": "P98809E0A67B9D897"
+     "uid": "GKFSMBOCFSBSO"
     },
     "description": "avg completion_tokens / prompt_tokens per request. <1 = input-heavy, >1 = output-heavy. Requests with input+output < 150 tokens are excluded from averages (probe/ping traffic).",
     "fieldConfig": {
@@ -934,7 +934,7 @@
      {
       "datasource": {
        "type": "postgres",
-       "uid": "P98809E0A67B9D897"
+       "uid": "GKFSMBOCFSBSO"
       },
       "editorMode": "code",
       "format": "time_series",

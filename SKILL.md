@@ -52,7 +52,7 @@ Analysis output is written for a human reader, so conclusions follow the caller'
 | litellm-dashboard-tokens.json | litellm-token-analysis | Token distributions, percentiles, output/input ratio. |
 | litellm-dashboard-grouped-bars.json | litellm-spendlogs-grouped-bars | Adjustable time buckets (5m–7d): volume as bars, latency as lines. |
 | litellm-dashboard-bars-search-agent.json | litellm-spendlogs-bars-search-agent | Same as above, with api_key relabeled as **Search Agent** plus a failed-requests table. |
-| maas-operation-dashboard-customer.json | efyuf9l9lvzswc | Customer-facing "MaaS Operation Dashboard" (N1–N20 layout), same `key_group` variable. |
+| maas-operation-dashboard-customer.json | wsd6bgm3e74k | Customer-facing "MaaS Operation Dashboard" (N1–N20 layout), same `key_group` variable. |
 
 All grouped charts share one series palette: glm-text = green, deepseek-v4-flash = blue, glm53-flash = orange, Search Agent = purple, `<none>` = gray.
 
@@ -74,7 +74,7 @@ Run each job once by hand and check its output (PNG size, archive section) befor
 
 ```bash
 CHROME_BIN=google-chrome OUT_DIR=... \
-  scripts/render-dashboard.sh efyuf9l9lvzswc "$OUT_DIR/customer_$(date +%F).png" yesterday 10m
+  scripts/render-dashboard.sh wsd6bgm3e74k "$OUT_DIR/customer_$(date +%F).png" yesterday 10m
 # window: yesterday | week | '<from_ms>-<to_ms>'; bucket optional (10m/30m/1d)
 ```
 
@@ -96,7 +96,7 @@ Key parameters:
    GRAFANA_URL=http://<host>:3000 GRAFANA_USER=admin GRAFANA_PASS=<pw> \
    DATASOURCE_UID=<uid> scripts/import-dashboards.sh
    ```
-   `DATASOURCE_UID` rewrites the baked-in uid (`P98809E0A67B9D897`) before POSTing. All six must return HTTP 200.
+   `DATASOURCE_UID` rewrites the baked-in uid (`GKFSMBOCFSBSO`) before POSTing. All six must return HTTP 200.
 3. Per-deployment key membership lives only in the `key_group` dashboard variable (a hidden custom variable); every panel SQL references `api_key IN (${key_group:sqlstring})`. Update members with `scripts/update-key-group.sh <hash,...>` (covers all six at once) or via Dashboard → Variables → key_group. Never edit the SQL literals.
 4. Verify: `/api/health`, datasource health, one `/api/ds/query` spot-check, then open each `/d/<uid>/...` page.
 

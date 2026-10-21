@@ -29,7 +29,7 @@ UIDS=(
   litellm-token-analysis
   litellm-spendlogs-grouped-bars
   litellm-spendlogs-bars-search-agent
-  efyuf9l9lvzswc
+  wsd6bgm3e74k
 )
 
 auth=(-u "${GRAFANA_USER}:${GRAFANA_PASS}")
