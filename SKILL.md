@@ -1,8 +1,8 @@
 ---
 name: litellm-operation-dashboard
 description: "Maintain the LiteLLM SpendLogs Grafana dashboard pack."
-version: 1.3.2
-author: Ethan
+version: 1.3.3
+author: damokuye-ethanhuang
 license: MIT
 platforms: [linux, macos]
 tags: [litellm, grafana, postgres, observability, llm-analytics]
