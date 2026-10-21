@@ -1,19 +1,12 @@
 ---
 name: litellm-operation-dashboard
 description: "Maintain the LiteLLM SpendLogs Grafana dashboard pack."
-version: 1.3.1
-author: Hermes Agent
+version: 1.3.2
+author: Ethan
 license: MIT
 platforms: [linux, macos]
-metadata:
-  hermes:
-    editorial_name: LiteLLM Operation Dashboard
-    editorial_description: >-
-      Six Grafana dashboards plus a schema and metric reference for LiteLLM
-      proxy spend logs - TTFT, E2E, TPOT, model groups, error tables,
-      one-command import.
-    tags: [litellm, grafana, postgres, observability, llm-analytics]
-    related_skills: [grafana-dashboards]
+tags: [litellm, grafana, postgres, observability, llm-analytics]
+related_skills: [grafana-dashboards]
 ---
 
 # LiteLLM Operation Dashboard
@@ -63,17 +56,17 @@ Analysis output is written for a human reader, so conclusions follow the caller'
 
 All grouped charts share one series palette: glm-text = green, deepseek-v4-flash = blue, glm53-flash = orange, Search Agent = purple, `<none>` = gray.
 
-## Scheduling (Hermes cron, not crontab)
+## Scheduling
 
-The nightly/weekly PNG renders and the nightly error analysis run as Hermes cron jobs with `--no-agent --script <name>`:
+The nightly/weekly PNG renders and the nightly error classification are plain scripts — wrap `scripts/render-dashboard.sh` (and your error-analysis driver) in small wrapper scripts and schedule them with cron or any scheduler:
 
-```bash
-hermes cron create "30 1 * * *"    --name render-maas-daily   --script render-maas-daily.sh   --no-agent --deliver local
-hermes cron create "0 1 * * 0"     --name render-maas-weekly  --script render-maas-weekly.sh  --no-agent --deliver local
-hermes cron create "0 23 * * *"    --name error-analysis      --script error-analysis.py      --no-agent --deliver local
+```cron
+30 1 * * *   /opt/dashboards/render-maas-daily.sh    # daily customer PNG
+0 1 * * 0    /opt/dashboards/render-maas-weekly.sh   # weekly customer PNG
+0 23 * * *   /opt/dashboards/error-analysis.py       # nightly failure classification
 ```
 
-Scripts must be **copies** under `~/.hermes/scripts/` (symlinks are rejected). Verify each job with `hermes cron run <id>`, then check `hermes cron runs <id>`. Do not add `crontab` entries for these.
+Run each job once by hand and check its output (PNG size, archive section) before trusting the schedule.
 
 ## Rendering PNGs
 
